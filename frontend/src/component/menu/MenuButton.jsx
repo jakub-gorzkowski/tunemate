@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function MenuButton(props) {
     return (
-        props.buttonText.length > 0 && props.buttonIcon &&
+        props.buttonText.length > 0 && props.buttonIcon && props.url &&
         <>
-            <a href={"#"}>
+            <a href={props.url}>
                 <div className={[
                     "w-72",
                     "h-12",
@@ -33,12 +33,14 @@ function MenuButton(props) {
 
 MenuButton.propTypes = {
     buttonIcon: PropTypes.object,
-    buttonText: PropTypes.string
+    buttonText: PropTypes.string,
+    url: PropTypes.string
 }
 
 MenuButton.defaultProps = {
     buttonIcon: null,
-    buttonText: "test",
+    buttonText: null,
+    url: null
 }
 
 export default MenuButton;

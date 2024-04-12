@@ -21,7 +21,8 @@ module.exports = {
         'menu': '#383838'
       },
       width: {
-        'search': '37.5em'
+        'search': '37.5em',
+        'content': '75em'
       },
       height: {
         'search': '1.875em'

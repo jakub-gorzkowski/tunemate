@@ -2,6 +2,10 @@ import PropTypes from "prop-types";
 import Album from "./Album";
 
 function ContentList(props) {
+    const albumsToRender = [];
+    for (let i = 0; i < props.size; i++) {
+        albumsToRender.push(<Album/>);
+    }
     return (
         <>
             <div>
@@ -12,13 +16,12 @@ function ContentList(props) {
                     "mx-5",
                     "my-2",
                 ].join(' ')}>{props.name}</h1>
-                <div className={"flex"}>
-                    <Album/>
-                    <Album/>
-                    <Album/>
-                    <Album/>
-                    <Album/>
-                    <Album/>
+                <div className={[
+                    "flex",
+                    "flex-wrap",
+                    "w-content"
+                ].join(' ')}>
+                    {albumsToRender}
                 </div>
             </div>
         </>

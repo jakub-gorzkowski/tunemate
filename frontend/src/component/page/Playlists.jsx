@@ -3,7 +3,7 @@ import Navigation from "../menu/Navigation";
 import Search from "../menu/Search";
 import ContentList from "../content/ContentList";
 
-function HomePage() {
+function Playlists() {
     return (
         <>
             <Navigation/>
@@ -16,15 +16,13 @@ function HomePage() {
                 "justify-center"].join(' ')}>
                 <Search/>
                 <div className={"flex-col mt-20"}>
-                    <ContentList name={"Popular this week"} size={6}/>
-                    <ContentList name={"Popular this month"} size={6}/>
-                    <ContentList name={"New in Genre"} size={6}/>
-                    <ContentList name={"New in Genre"} size={6}/>
-                    <ContentList name={"New in Genre"} size={6}/>
+                    <ContentList name={"Your playlists"} size={6}/>
+                    <ContentList name={"Liked playlists"} size={6}/>
+                    <ContentList name={"Popular playlists"} size={12}/>
                 </div>
             </div>
         </>
     );
 }
 
-export default HomePage;
+export default Playlists;

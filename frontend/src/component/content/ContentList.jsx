@@ -1,12 +1,24 @@
 import PropTypes from "prop-types";
-import Album from "./Album";
+import Release from "./Release";
+import Artist from "./Artist";
+import Playlist from "./Playlist";
+import Genre from "./Genre";
 
 function ContentList(props) {
-    const albumsToRender = [];
+
+    const contentType = (
+        props.type === 'release' ? <Release/> :
+        props.type === 'artist' ? <Artist/> :
+        props.type === 'playlist' ? <Playlist/> :
+        props.type === 'genre' ? <Genre/> : null
+    );
+
+    const releasesToRender = [];
     for (let i = 0; i < props.size; i++) {
-        albumsToRender.push(<Album/>);
+        releasesToRender.push(contentType);
     }
     return (
+        props.type != null &&
         <>
             <div>
                 <h1 className={[
@@ -21,7 +33,7 @@ function ContentList(props) {
                     "flex-wrap",
                     "w-content"
                 ].join(' ')}>
-                    {albumsToRender}
+                    {releasesToRender}
                 </div>
             </div>
         </>
@@ -29,7 +41,8 @@ function ContentList(props) {
 }
 
 ContentList.propTypes = {
-    name: PropTypes.string
-}
+    name: PropTypes.string,
+    type: PropTypes.string
+};
 
 export default ContentList;

@@ -1,5 +1,5 @@
 
-function Album() {
+function Release() {
     return (
         <>
             <a href={"#"}>
@@ -38,4 +38,4 @@ function Album() {
     );
 }
 
-export default Album;
+export default Release;

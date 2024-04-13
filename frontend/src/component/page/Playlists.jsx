@@ -1,4 +1,3 @@
-import React from "react";
 import Navigation from "../menu/Navigation";
 import Search from "../menu/Search";
 import ContentList from "../content/ContentList";
@@ -15,10 +14,10 @@ function Playlists() {
                 "flex-auto",
                 "justify-center"].join(' ')}>
                 <Search/>
-                <div className={"flex-col mt-20"}>
-                    <ContentList name={"Your playlists"} size={6}/>
-                    <ContentList name={"Liked playlists"} size={6}/>
-                    <ContentList name={"Popular playlists"} size={12}/>
+                <div className={"mt-20"}>
+                    <ContentList name={"Your playlists"} type={'playlist'} size={6}/>
+                    <ContentList name={"Liked playlists"} type={'playlist'} size={6}/>
+                    <ContentList name={"Popular playlists"} type={'playlist'} size={12}/>
                 </div>
             </div>
         </>

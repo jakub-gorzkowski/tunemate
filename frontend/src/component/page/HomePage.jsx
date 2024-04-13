@@ -1,4 +1,3 @@
-import React from "react";
 import Navigation from "../menu/Navigation";
 import Search from "../menu/Search";
 import ContentList from "../content/ContentList";
@@ -15,12 +14,12 @@ function HomePage() {
                 "flex-auto",
                 "justify-center"].join(' ')}>
                 <Search/>
-                <div className={"flex-col mt-20"}>
-                    <ContentList name={"Popular this week"} size={6}/>
-                    <ContentList name={"Popular this month"} size={6}/>
-                    <ContentList name={"New in Genre"} size={6}/>
-                    <ContentList name={"New in Genre"} size={6}/>
-                    <ContentList name={"New in Genre"} size={6}/>
+                <div className={"mt-20"}>
+                    <ContentList name={"Popular this week"} type={'release'} size={6}/>
+                    <ContentList name={"Popular this month"} type={'release'} size={6}/>
+                    <ContentList name={"New in Genre"} type={'release'} size={6}/>
+                    <ContentList name={"New in Genre"} type={'release'} size={6}/>
+                    <ContentList name={"New in Genre"} type={'release'} size={6}/>
                 </div>
             </div>
         </>

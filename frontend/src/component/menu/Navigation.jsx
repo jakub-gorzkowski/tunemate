@@ -12,7 +12,7 @@ function Navigation() {
                 "w-80",
                 "bg-menu",
                 "py-3",
-                "border-r-2",
+                "border-r",
                 "border-menu",
                 "justify-center",
                 "items-center"
@@ -34,7 +34,7 @@ function Navigation() {
                     "items-center",
                     "bg-menu",
                     "border-t",
-                    "border-r-2",
+                    "border-r",
                     "border-menu"
                 ].join(' ')}>
                     <MenuButton buttonIcon={faHome} buttonText={"Home"} url={"/"}/>
@@ -46,7 +46,7 @@ function Navigation() {
                     "w-80",
                     "bg-menu",
                     "h-full",
-                    "border-r-2",
+                    "border-r",
                     "border-menu"
                 ].join(' ')}>
                 </div>
@@ -56,7 +56,7 @@ function Navigation() {
                     "flex-col",
                     "items-center",
                     "bg-menu",
-                    "border-r-2",
+                    "border-r",
                     "border-menu"
                 ].join(' ')}>
                     <MenuButton buttonIcon={faUser} buttonText={"Profile"} url={"/profile"}/>

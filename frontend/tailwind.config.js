@@ -15,7 +15,8 @@ module.exports = {
         'search': '#444444',
         'page': '#222222',
         'page-hover': '#303030',
-        'cover-placeholder': '#D9D9D9'
+        'cover-placeholder': '#D9D9D9',
+        'genre': '#202020'
       },
       borderColor: {
         'menu': '#383838'
@@ -29,6 +30,5 @@ module.exports = {
       }
     },
   },
-  plugins: [],
 }
 

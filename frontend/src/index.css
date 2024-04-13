@@ -5,3 +5,16 @@
 body {
     background-color: #222222;
 }
+
+::-webkit-scrollbar {
+    width: 0.75em;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1A1A1A; /* kolor paska przewijania */
+    border-radius: 1em;
+}

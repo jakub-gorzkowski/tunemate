@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
-import Release from "./Release";
-import Artist from "./Artist";
-import Playlist from "./Playlist";
-import Genre from "./Genre";
+import Release from "./list-item/Release";
+import Artist from "./list-item/Artist";
+import Playlist from "./list-item/Playlist";
+import Genre from "./list-item/Genre";
 
 function ContentList(props) {
 

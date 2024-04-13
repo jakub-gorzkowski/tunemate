@@ -1,7 +1,8 @@
 import {Route, Routes} from "react-router-dom";
-import HomePage from "./component/page/HomePage";
-import Playlists from "./component/page/Playlists";
-import Profile from "./component/page/Profile";
+import HomePage from "./page/HomePage";
+import Playlists from "./page/Playlists";
+import Profile from "./page/Profile";
+import Settings from "./page/Settings";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
                   <Route path={'/playlists'} element={<Playlists/>}/>
 
                   <Route path={'/profile'} element={<Profile/>}/>
+                  <Route path={'/settings'} element={<Settings/>}/>
               </Routes>
           </div>
       </>

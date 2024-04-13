@@ -1,7 +1,7 @@
-import Navigation from "../menu/Navigation";
-import Search from "../menu/Search";
-import ContentList from "../content/ContentList";
-import ProfileBanner from "../content/ProfileBanner";
+import Navigation from "../component/menu/Navigation";
+import Search from "../component/menu/Search";
+import ContentList from "../component/content/ContentList";
+import ProfileBanner from "../component/content/banner/ProfileBanner";
 
 function Profile() {
     return (
@@ -17,7 +17,7 @@ function Profile() {
                 <Search/>
                 <div className={"flex-col w-full"}>
                     <div className={"flex-col w-full"}>
-                        <ProfileBanner/>
+                        <ProfileBanner type={"profile"}/>
                     </div>
                     <div className={"flex flex-col items-center justify-center mt-16"}>
                         <ContentList name={"Genres"} type={'genre'} size={12}/>

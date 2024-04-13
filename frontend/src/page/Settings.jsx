@@ -20,7 +20,7 @@ function Profile() {
                     <div className={"flex-col w-full"}>
                         <ProfileBanner type={"settings"}/>
                     </div>
-                    <div className={"flex flex-col items-center justify-center mt-16"}>
+                    <div className={"flex flex-col items-center justify-center my-16"}>
                         <AccountDetails/>
                         <AccountLinker/>
                     </div>

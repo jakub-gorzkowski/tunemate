@@ -2,7 +2,7 @@ import Navigation from "../component/menu/Navigation";
 import Search from "../component/menu/Search";
 import ContentList from "../component/content/ContentList";
 
-function HomePage() {
+function Favourites() {
     return (
         <>
             <Navigation/>
@@ -15,15 +15,14 @@ function HomePage() {
                 "justify-center"].join(' ')}>
                 <Search/>
                 <div className={"my-20"}>
-                    <ContentList name={"Popular this week"} type={'release'} size={6}/>
-                    <ContentList name={"Popular this month"} type={'release'} size={6}/>
-                    <ContentList name={"New in Genre"} type={'release'} size={6}/>
-                    <ContentList name={"New in Genre"} type={'release'} size={6}/>
-                    <ContentList name={"New in Genre"} type={'release'} size={6}/>
+                    <ContentList name={"Favourite releases"} type={'release'} size={6}/>
+                    <ContentList name={"Favourite artists"} type={'artist'} size={6}/>
+                    <ContentList name={"Favourite playlists"} type={'playlist'} size={6}/>
+                    <ContentList name={"Favourite genres"} type={'genre'} size={12}/>
                 </div>
             </div>
         </>
     );
 }
 
-export default HomePage;
+export default Favourites;

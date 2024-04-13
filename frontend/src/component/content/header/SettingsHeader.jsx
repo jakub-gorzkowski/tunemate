@@ -19,7 +19,8 @@ function SettingsHeader() {
                 </div>
                 <div className={"w-content"}>
                     <div className={"flex mt-12 mx-3 mb-2"}>
-                        <a href={"#"}><h3 className={"mx-3 text-white"}>Settings</h3></a>
+                        <a href={"#"}><h3 className={"mx-3 text-white"}>Account details</h3></a>
+                        <a href={"#"}><h3 className={"mx-3 text-white"}>Link your accounts</h3></a>
                     </div>
                 </div>
             </div>

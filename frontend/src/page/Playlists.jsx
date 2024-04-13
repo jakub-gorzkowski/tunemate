@@ -14,7 +14,7 @@ function Playlists() {
                 "flex-auto",
                 "justify-center"].join(' ')}>
                 <Search/>
-                <div className={"mt-20"}>
+                <div className={"my-20"}>
                     <ContentList name={"Your playlists"} type={'playlist'} size={6}/>
                     <ContentList name={"Liked playlists"} type={'playlist'} size={6}/>
                     <ContentList name={"Popular playlists"} type={'playlist'} size={12}/>

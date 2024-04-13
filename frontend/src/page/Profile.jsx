@@ -19,7 +19,7 @@ function Profile() {
                     <div className={"flex-col w-full"}>
                         <ProfileBanner type={"profile"}/>
                     </div>
-                    <div className={"flex flex-col items-center justify-center mt-16"}>
+                    <div className={"flex flex-col items-center justify-center my-16"}>
                         <ContentList name={"Genres"} type={'genre'} size={12}/>
                         <ContentList name={"Favourites"} type={'release'} size={6}/>
                         <ContentList name={"Artists"} type={'artist'} size={6}/>

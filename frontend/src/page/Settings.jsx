@@ -1,8 +1,8 @@
 import Navigation from "../component/menu/Navigation";
 import Search from "../component/menu/Search";
 import ProfileBanner from "../component/content/banner/ProfileBanner";
-import AccountDetails from "../component/form/AccountDetails";
-import AccountLinker from "../component/form/AccountLinker";
+import AccountDetails from "../component/form/account/AccountDetails";
+import AccountLinker from "../component/form/account/AccountLinker";
 
 function Profile() {
     return (

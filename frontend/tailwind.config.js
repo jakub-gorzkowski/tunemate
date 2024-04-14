@@ -24,7 +24,8 @@ module.exports = {
       width: {
         'search': '37.5em',
         'content': '75em',
-        'track': '64em'
+        'track': '64em',
+        'review': '48em'
       },
       height: {
         'search': '1.875em'

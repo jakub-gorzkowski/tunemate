@@ -2,6 +2,7 @@ import Navigation from "../component/menu/Navigation";
 import Search from "../component/menu/Search";
 import ContentList from "../component/content/list/ContentList";
 import ProfileBanner from "../component/content/banner/ProfileBanner";
+import ReviewList from "../component/content/list/ReviewList";
 
 function Profile() {
     return (
@@ -24,6 +25,7 @@ function Profile() {
                         <ContentList name={"Favourites"} type={'release'} size={6}/>
                         <ContentList name={"Artists"} type={'artist'} size={6}/>
                         <ContentList name={"Playlists"} type={'playlist'} size={6}/>
+                        <ReviewList title={"Posted reviews"} size={3}/>
                     </div>
                 </div>
             </div>

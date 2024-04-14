@@ -2,7 +2,7 @@
 function Release() {
     return (
         <>
-            <a href={"#"}>
+            <a href={"/release/:id"}>
                 <div className={[
                     "flex",
                     "flex-col",

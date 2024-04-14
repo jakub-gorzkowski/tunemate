@@ -1,8 +1,10 @@
 import Navigation from "../component/menu/Navigation";
 import Search from "../component/menu/Search";
 import ContentList from "../component/content/list/ContentList";
+import TrackList from "../component/content/list/TrackList";
+import ReleaseBanner from "../component/content/banner/ReleaseBanner";
 
-function HomePage() {
+function Release() {
     return (
         <>
             <Navigation/>
@@ -14,16 +16,16 @@ function HomePage() {
                 "flex-auto",
                 "justify-center"].join(' ')}>
                 <Search/>
-                <div className={"my-20"}>
-                    <ContentList name={"Popular this week"} type={'release'} size={6}/>
-                    <ContentList name={"Popular this month"} type={'release'} size={6}/>
-                    <ContentList name={"New in Genre"} type={'release'} size={6}/>
-                    <ContentList name={"New in Genre"} type={'release'} size={6}/>
-                    <ContentList name={"New in Genre"} type={'release'} size={6}/>
+                <div className={"flex-col w-full"}>
+                    <ReleaseBanner/>
+                    <div className={"flex flex-col items-center my-16 text-white"}>
+                        <TrackList length={12}/>
+                        <ContentList name={"Genres"} type={"genre"} size={2}/>
+                    </div>
                 </div>
             </div>
         </>
     );
 }
 
-export default HomePage;
+export default Release;

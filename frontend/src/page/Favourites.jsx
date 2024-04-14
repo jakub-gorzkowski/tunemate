@@ -1,6 +1,6 @@
 import Navigation from "../component/menu/Navigation";
 import Search from "../component/menu/Search";
-import ContentList from "../component/content/ContentList";
+import ContentList from "../component/content/list/ContentList";
 
 function Favourites() {
     return (

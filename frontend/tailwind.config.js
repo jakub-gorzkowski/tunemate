@@ -23,7 +23,8 @@ module.exports = {
       },
       width: {
         'search': '37.5em',
-        'content': '75em'
+        'content': '75em',
+        'track': '64em'
       },
       height: {
         'search': '1.875em'

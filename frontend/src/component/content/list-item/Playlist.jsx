@@ -2,7 +2,7 @@
 function Playlist() {
     return (
         <>
-            <a href={"#"}>
+            <a href={"/playlist/:id"}>
                 <div className={[
                     "flex",
                     "flex-col",

@@ -5,6 +5,7 @@ import Playlists from "./page/Playlists";
 import Profile from "./page/Profile";
 import Settings from "./page/Settings";
 import Release from "./page/Release";
+import Playlist from "./page/Playlist";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                     <Route path={'/settings'} element={<Settings/>}/>
 
                     <Route path={'/release/:id'} element={<Release/>}/>
+                    <Route path={'/playlist/:id'} element={<Playlist/>}/>
                 </Routes>
             </div>
         </>

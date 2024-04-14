@@ -4,7 +4,7 @@ import GoForward from "../button/GoForward";
 function PlaylistNavigation() {
     return (
         <>
-            <div className={"flex flex-auto mt-12"}>
+            <div className={"flex flex-auto mt-4"}>
                 <GoBackward/>
                 <GoForward/>
             </div>

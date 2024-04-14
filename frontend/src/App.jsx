@@ -4,6 +4,7 @@ import Favourites from "./page/Favourites";
 import Playlists from "./page/Playlists";
 import Profile from "./page/Profile";
 import Settings from "./page/Settings";
+import Artist from "./page/Artist";
 import Release from "./page/Release";
 import Playlist from "./page/Playlist";
 
@@ -19,6 +20,7 @@ function App() {
                     <Route path={'/profile'} element={<Profile/>}/>
                     <Route path={'/settings'} element={<Settings/>}/>
 
+                    <Route path={'/artist/:id'} element={<Artist/>}/>
                     <Route path={'/release/:id'} element={<Release/>}/>
                     <Route path={'/playlist/:id'} element={<Playlist/>}/>
                 </Routes>

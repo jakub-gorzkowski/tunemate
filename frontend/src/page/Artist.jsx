@@ -1,11 +1,10 @@
 import Navigation from "../component/menu/Navigation";
 import Search from "../component/menu/Search";
 import ContentList from "../component/content/list/ContentList";
+import ArtistBanner from "../component/content/banner/ArtistBanner";
 import TrackList from "../component/content/list/TrackList";
-import PlaylistBanner from "../component/content/banner/PlaylistBanner";
-import PlaylistNavigation from "../component/menu/PlaylistNavigation";
 
-function Playlist() {
+function Profile() {
     return (
         <>
             <Navigation/>
@@ -18,11 +17,13 @@ function Playlist() {
                 "justify-center"].join(' ')}>
                 <Search/>
                 <div className={"flex-col w-full"}>
-                    <PlaylistBanner/>
-                    <div className={"flex flex-col items-center my-16"}>
-                        <TrackList length={12}/>
-                        <PlaylistNavigation/>
-                        <ContentList name={"Genres"} type={"genre"} size={6}/>
+                    <div className={"flex-col w-full"}>
+                        <ArtistBanner/>
+                    </div>
+                    <div className={"flex flex-col items-center justify-center my-16"}>
+                        <TrackList title={"Popular tracks"} length={10}/>
+                        <ContentList name={"Latest releases"} type={'release'} size={6}/>
+                        <ContentList name={"Genres"} type={'genre'} size={4}/>
                     </div>
                 </div>
             </div>
@@ -30,4 +31,4 @@ function Playlist() {
     );
 }
 
-export default Playlist;
+export default Profile;

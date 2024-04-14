@@ -9,12 +9,21 @@ function TrackList(props) {
 
     return (
         <>
-            {trackList}
+            <div className={"mt-2 mb-8"}>
+                <h1 className={[
+                    "text-title",
+                    "text-xl",
+                    "font-medium",
+                    "mb-4",
+                ].join(' ')}>{props.title}</h1>
+                {trackList}
+            </div>
         </>
     );
 }
 
 TrackList.propTypes = {
+    title: PropTypes.string,
     length: PropTypes.number
 };
 

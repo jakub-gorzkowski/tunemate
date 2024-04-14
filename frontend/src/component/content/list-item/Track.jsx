@@ -5,7 +5,7 @@ function Track() {
         <>
             <div className={"px-4 py-1 w-track border-b border-menu flex flex-auto items-center hover:bg-page-hover"}>
                 <div className={"w-full"}>
-                    <h1>Track title</h1>
+                    <h1 className={"text-white"}>Track title</h1>
                     <h2 className={"font-thin text-menu"}>Artist name</h2>
                 </div>
                 <div className={"w-full"}/>

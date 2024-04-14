@@ -2,7 +2,7 @@
 function Artist() {
     return (
         <>
-            <a href={"#"}>
+            <a href={"/artist/:id"}>
                 <div className={[
                     "flex",
                     "flex-col",

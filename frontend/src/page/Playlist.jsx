@@ -4,8 +4,6 @@ import ContentList from "../component/content/list/ContentList";
 import TrackList from "../component/content/list/TrackList";
 import PlaylistBanner from "../component/content/banner/PlaylistBanner";
 import PlaylistNavigation from "../component/menu/PlaylistNavigation";
-import Review from "../component/form/review/Review";
-import ReviewList from "../component/content/list/ReviewList";
 
 function Playlist() {
     return (
@@ -25,8 +23,6 @@ function Playlist() {
                         <TrackList length={12}/>
                         <PlaylistNavigation/>
                         <ContentList name={"Genres"} type={"genre"} size={6}/>
-                        <Review/>
-                        <ReviewList size={2} title={"Users reviews"}/>
                     </div>
                 </div>
             </div>

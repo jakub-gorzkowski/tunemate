@@ -21,7 +21,7 @@ public class Track {
     private Long id;
 
     @Column(name = "spotify_id")
-    private Long spotifyId;
+    private String spotifyId;
 
     @Column(name = "title")
     private String title;

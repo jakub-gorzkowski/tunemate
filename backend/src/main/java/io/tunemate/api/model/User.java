@@ -27,7 +27,7 @@ public class User {
     private String username;
 
     @Column(name = "photo_url")
-    private String photo_url;
+    private String photoUrl;
 
     @Column(name = "email")
     private String email;

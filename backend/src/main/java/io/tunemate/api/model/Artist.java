@@ -27,7 +27,7 @@ public class Artist {
     private String name;
 
     @Column(name = "photo_url")
-    private String photo_url;
+    private String photoUrl;
 
     @Column(name = "listener_count")
     private Long listenerCount;

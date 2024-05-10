@@ -27,7 +27,7 @@ public class Playlist {
     private String title;
 
     @Column(name = "photo_url")
-    private String photo_url;
+    private String photoUrl;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

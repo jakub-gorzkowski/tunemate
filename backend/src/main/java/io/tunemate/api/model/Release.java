@@ -27,7 +27,7 @@ public class Release {
     private String title;
 
     @Column(name = "photo_url")
-    private String photo_url;
+    private String photoUrl;
 
     @Column(name = "total_tracks")
     private Long totalTracks;

@@ -36,6 +36,12 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public UserDto findUserByEmail(String email) {
+        User user = userRepository.findByEmail(email).get();
+        return mapToUserDto(user);
+    }
+
+    @Override
     public User updateUser(Long userId, User user) {
         user.setId(userId);
         return userRepository.findById(userId).map(existingUser -> {

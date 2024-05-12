@@ -20,16 +20,16 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "spotify_id")
+    @Column(name = "spotify_id", unique = true)
     private String spotifyId;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "photo_url")
     private String photoUrl;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")

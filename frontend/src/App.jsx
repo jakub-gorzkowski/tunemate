@@ -1,4 +1,6 @@
 import {Route, Routes} from "react-router-dom";
+import Register from "./page/Register";
+import Login from "./page/Login";
 import HomePage from "./page/HomePage";
 import Favourites from "./page/Favourites";
 import Playlists from "./page/Playlists";
@@ -14,6 +16,9 @@ function App() {
         <>
             <div className={"flex flex-auto"}>
                 <Routes>
+                    <Route path={'/register'} element={<Register/>}/>
+                    <Route path={'/login'} element={<Login/>}/>
+
                     <Route path={'/'} element={<HomePage/>}/>
                     <Route path={'/favourites'} element={<Favourites/>}/>
                     <Route path={'/playlists'} element={<Playlists/>}/>

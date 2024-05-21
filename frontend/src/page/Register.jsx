@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import AuthenticationService from "../service/AuthenticationService";
 
 const input = [
     "w-96",
@@ -12,6 +13,7 @@ const input = [
 ].join(' ');
 
 function Register() {
+    let navigate = useNavigate();
     const [email, setEmail] = useState();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
@@ -27,18 +29,15 @@ function Register() {
         }
 
         try {
-            const response = await axios.post("http://localhost:8080/api/user/create", {
-                email: email,
-                username: username,
-                password: password
-            });
+            const response = await AuthenticationService.register(username, email, password);
 
             switch (response.status) {
-                case 201:
+                case 200:
                     setMessage("You have created an account");
+                    navigate("/login");
                     break;
                 default:
-                    setMessage(response.data);
+                    setMessage(typeof response.data === 'object' ? response.data.error : response.data);
             }
 
         } catch (error) {

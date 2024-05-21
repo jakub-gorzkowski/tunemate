@@ -1,11 +1,18 @@
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AuthenticationService from "../../service/AuthenticationService";
 
 function MenuButton(props) {
+    const handleSubmit = async (e) => {
+        if (props.logout === true) {
+            AuthenticationService.logout();
+        }
+    }
+
     return (
         props.buttonText.length > 0 && props.buttonIcon && props.url &&
         <>
-            <a href={props.url}>
+            <a href={props.url} onClick={handleSubmit}>
                 <div className={[
                     "w-72",
                     "h-12",
@@ -34,13 +41,15 @@ function MenuButton(props) {
 MenuButton.propTypes = {
     buttonIcon: PropTypes.object,
     buttonText: PropTypes.string,
-    url: PropTypes.string
+    url: PropTypes.string,
+    logout: PropTypes.bool
 }
 
 MenuButton.defaultProps = {
     buttonIcon: null,
     buttonText: null,
-    url: null
+    url: null,
+    logout: false
 }
 
 export default MenuButton;

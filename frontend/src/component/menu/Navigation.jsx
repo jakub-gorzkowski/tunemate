@@ -1,5 +1,5 @@
 import MenuButton from "./MenuButton";
-import { faHome, faHeart, faStar, faMessage, faUser, faGear} from '@fortawesome/free-solid-svg-icons'
+import { faHome, faHeart, faStar, faMessage, faUser, faGear, faDoorClosed} from '@fortawesome/free-solid-svg-icons'
 
 function Navigation() {
     return (
@@ -61,6 +61,7 @@ function Navigation() {
                 ].join(' ')}>
                     <MenuButton buttonIcon={faUser} buttonText={"Profile"} url={"/profile"}/>
                     <MenuButton buttonIcon={faGear} buttonText={"Settings"} url={"/settings"}/>
+                    <MenuButton buttonIcon={faDoorClosed} buttonText={"Log out"} url={"/"} logout={true}/>
                 </div>
             </div>
         </>

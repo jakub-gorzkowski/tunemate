@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import AuthenticationService from "../service/AuthenticationService";
 
 const input = [
     "w-96",
@@ -12,25 +13,21 @@ const input = [
 ].join(' ');
 
 function Login() {
+    let navigate = useNavigate();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [message, setMessage] = useState();
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await axios.get(`http://localhost:8080/api/user/getByEmail/${email}`);
-
-            switch (response.status) {
-                case 200:
-                    setMessage("You have successfully logged in");
-                    break;
-                default:
-                    setMessage("Invalid email or password");
+        AuthenticationService.login(email, password).then(
+            () => {
+                navigate('/');
+            },
+            (error) => {
+                setMessage("Invalid email or password");
             }
-        } catch (error) {
-            setMessage("Invalid email or password");
-        }
+        );
     };
 
     return (
@@ -48,7 +45,7 @@ function Login() {
 
                     <img src="/image/logo.png" alt="Tunemate"/>
 
-                    <form method={"post"} onSubmit={handleSubmit} className={"mt-3 mx-5 text-white text-lg font-light"}>
+                    <form onSubmit={handleSubmit} className={"mt-3 mx-5 text-white text-lg font-light"}>
 
                         <h1>Email</h1>
                         <input type={"text"} placeholder={"Email address"} className={input} value={email}

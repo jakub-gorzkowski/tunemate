@@ -29,9 +29,6 @@ public class Artist {
     @Column(name = "photo_url")
     private String photoUrl;
 
-    @Column(name = "listener_count")
-    private Long listenerCount;
-
     @Column(name = "follower_count")
     private Long followerCount;
 

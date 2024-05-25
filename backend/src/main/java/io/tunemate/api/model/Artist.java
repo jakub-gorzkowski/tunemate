@@ -16,11 +16,7 @@ import java.util.List;
 @Table(name = "artists")
 public class Artist {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
-
-    @Column(name = "spotify_id")
     private String spotifyId;
 
     @Column(name = "name")

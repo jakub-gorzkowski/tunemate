@@ -27,8 +27,8 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers("/api/artists/**").permitAll();
                     authorize.requestMatchers("/api/authentication/**").permitAll().anyRequest().authenticated();
-
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

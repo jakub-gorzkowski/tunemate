@@ -1,5 +1,11 @@
 package io.tunemate.api.service.spotify;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.tunemate.api.model.Artist;
+import io.tunemate.api.service.artist.ArtistService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -36,5 +42,29 @@ public class SpotifyServiceImplementation implements SpotifyService {
 
         Map<String, Object> responseBody = response.getBody();
         return responseBody.get("access_token").toString();
+    }
+
+    @Override
+    public Artist retrieveArtist(String artistId) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        String url = "https://api.spotify.com/v1/artists/" + artistId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + this.getAccessToken());
+        headers.set("Accept", "application/json");
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(response.getBody());
+        String spotifyId = rootNode.path("id").asText();
+
+        return Artist.builder()
+                .spotifyId(spotifyId)
+                .name(rootNode.path("name").asText())
+                .followerCount(rootNode.path("followers").path("total").asLong())
+                .photoUrl(rootNode.path("images").get(0).path("url").asText())
+                .build();
     }
 }

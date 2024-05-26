@@ -1,14 +1,15 @@
 package io.tunemate.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -16,11 +17,7 @@ import java.util.List;
 @Table(name = "releases")
 public class Release {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
-
-    @Column(name = "spotify_id")
     private String spotifyId;
 
     @Column(name = "title")
@@ -32,11 +29,15 @@ public class Release {
     @Column(name = "total_tracks")
     private Long totalTracks;
 
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
+
     @OneToMany(mappedBy = "release", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
     @ManyToMany(mappedBy = "releases")
-    private List<Artist> artists;
+    @JsonBackReference
+    private Set<Artist> artists;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

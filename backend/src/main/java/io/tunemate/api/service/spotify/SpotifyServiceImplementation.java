@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tunemate.api.model.Artist;
+import io.tunemate.api.model.Genre;
 import io.tunemate.api.model.Release;
 import io.tunemate.api.model.Track;
 import io.tunemate.api.service.artist.ArtistService;
+import io.tunemate.api.service.genre.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -27,10 +29,12 @@ public class SpotifyServiceImplementation implements SpotifyService {
     @Value("${application.spotify.client-secret}")
     private String clientSecret;
     private final ArtistService artistService;
+    private final GenreService genreService;
 
     @Autowired
-    public SpotifyServiceImplementation(ArtistService artistService) {
+    public SpotifyServiceImplementation(ArtistService artistService, GenreService genreService) {
         this.artistService = artistService;
+        this.genreService = genreService;
     }
 
     @Override
@@ -68,15 +72,43 @@ public class SpotifyServiceImplementation implements SpotifyService {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode rootNode = mapper.readTree(response.getBody());
+        JsonNode genresNode = rootNode.path("genres");
+
         String spotifyId = rootNode.path("id").asText();
 
-        return Artist.builder()
+        Artist artist = Artist.builder()
                 .spotifyId(spotifyId)
                 .name(rootNode.path("name").asText())
                 .followerCount(rootNode.path("followers").path("total").asLong())
                 .photoUrl(rootNode.path("images").get(0).path("url").asText())
                 .tracks(null)
+                .genres(null)
                 .build();
+
+        Set<Genre> genres = new HashSet<>();
+
+        for (JsonNode genre : genresNode) {
+            String genreName = genre.asText();
+            if (!genreService.exists(genreName)) {
+                Genre artistGenre = new Genre();
+                artistGenre.setGenre(genreName);
+
+                Set<Artist> genreArtists = new HashSet<>();
+                if (artistGenre.getArtists() != null) {
+                    genreArtists = artistGenre.getArtists();
+                } else {
+                    genreArtists.add(artist);
+                }
+                artistGenre.setArtists(genreArtists);
+
+                genreService.createGenre(artistGenre);
+                genres.add(artistGenre);
+            }
+        }
+
+        artist.setGenres(genres);
+
+        return artist;
     }
 
     @Override
@@ -167,10 +199,42 @@ public class SpotifyServiceImplementation implements SpotifyService {
                     .title(itemNode.path("name").asText())
                     .duration(itemNode.path("duration_ms").asLong())
                     .artists(artists)
+                    .isTopTrack(true)
                     .build();
             topTracks.add(track);
         }
 
         return topTracks;
     }
+
+//    @Override
+//    public Set<Genre> retrieveGenres(String artistId) throws JsonProcessingException {
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        String url = "https://api.spotify.com/v1/artists/" + artistId;
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Authorization", "Bearer " + this.getAccessToken());
+//        headers.set("Accept", "application/json");
+//
+//        HttpEntity<String> entity = new HttpEntity<>(headers);
+//
+//        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+//        ObjectMapper mapper = new ObjectMapper();
+//        JsonNode rootNode = mapper.readTree(response.getBody());
+//        JsonNode genresNode = rootNode.path("genres");
+//
+//        Set<Genre> genres = new HashSet<>();
+//
+//        for (JsonNode genre : genresNode) {
+//
+//        }
+//
+//        return Genre.builder()
+//                .spotifyId(spotifyId)
+//                .name(rootNode.path("name").asText())
+//                .followerCount(rootNode.path("followers").path("total").asLong())
+//                .photoUrl(rootNode.path("images").get(0).path("url").asText())
+//                .tracks(null)
+//                .build();
+//    }
 }

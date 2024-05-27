@@ -25,6 +25,9 @@ public class Track {
     @Column(name = "duration")
     private Long duration;
 
+    @Column(name = "top_track")
+    private Boolean isTopTrack;
+
     @ManyToMany(mappedBy = "tracks")
     private List<Release> releases;
 
@@ -42,7 +45,4 @@ public class Track {
 
     @ManyToMany(mappedBy = "tracks")
     private List<Playlist> playlists;
-
-    @ManyToMany(mappedBy = "tracks")
-    private List<Genre> genres;
 }

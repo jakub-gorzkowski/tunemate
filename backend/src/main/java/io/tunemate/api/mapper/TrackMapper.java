@@ -11,11 +11,9 @@ public class TrackMapper {
                 .spotifyId(track.getSpotifyId())
                 .title(track.getTitle())
                 .duration(track.getDuration())
-                .artists(
-                        track.getArtists().stream()
+                .artists(track.getArtists().stream()
                         .map(ArtistMapper::MapToArtistDto)
-                        .collect(Collectors.toSet())
-                )
+                        .collect(Collectors.toSet()))
                 .build();
     }
 }

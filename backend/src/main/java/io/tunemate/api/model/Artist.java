@@ -43,7 +43,8 @@ public class Artist {
     private Set<Track> tracks;
 
     @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
-    private List<Genre> genres;
+    @JsonBackReference
+    private Set<Genre> genres;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

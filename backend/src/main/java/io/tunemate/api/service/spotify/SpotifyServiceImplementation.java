@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tunemate.api.model.Artist;
 import io.tunemate.api.model.Release;
+import io.tunemate.api.model.Track;
 import io.tunemate.api.service.artist.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -74,11 +75,12 @@ public class SpotifyServiceImplementation implements SpotifyService {
                 .name(rootNode.path("name").asText())
                 .followerCount(rootNode.path("followers").path("total").asLong())
                 .photoUrl(rootNode.path("images").get(0).path("url").asText())
+                .tracks(null)
                 .build();
     }
 
     @Override
-    public Set<Release> retrieveArtistReleases(String artistId) throws JsonProcessingException, ParseException {
+    public Set<Release> retrieveArtistReleases(String artistId) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
 
         String url = "https://api.spotify.com/v1/artists/" + artistId + "/albums";
@@ -125,5 +127,50 @@ public class SpotifyServiceImplementation implements SpotifyService {
         }
 
         return releases;
+    }
+
+    @Override
+    public Set<Track> retrieveArtistTopTracks(String artistId) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        String url = "https://api.spotify.com/v1/artists/" + artistId + "/top-tracks";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + this.getAccessToken());
+        headers.set("Accept", "application/json");
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(response.getBody());
+        JsonNode tracksNode = rootNode.path("tracks");
+
+        Set<Track> topTracks = new HashSet<>();
+
+        for (JsonNode itemNode : tracksNode) {
+            Set<Artist> artists = new HashSet<>();
+            JsonNode artistsNode = itemNode.path("artists");
+
+            for (JsonNode artistNode : artistsNode) {
+                String spotifyId = artistNode.path("id").asText();
+
+                if (artistService.existsBySpotifyId(spotifyId)) {
+                    artists.add(artistService.findById(spotifyId));
+                } else {
+                    Artist artist = this.retrieveArtist(spotifyId);
+                    artistService.createArtist(artist);
+                }
+            }
+
+            Track track = Track.builder()
+                    .spotifyId(itemNode.path("id").asText())
+                    .title(itemNode.path("name").asText())
+                    .duration(itemNode.path("duration_ms").asLong())
+                    .artists(artists)
+                    .build();
+            topTracks.add(track);
+        }
+
+        return topTracks;
     }
 }

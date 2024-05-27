@@ -1,5 +1,6 @@
 package io.tunemate.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,7 +39,8 @@ public class Artist {
     private Set<Release> releases;
 
     @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
-    private List<Track> tracks;
+    @JsonBackReference
+    private Set<Track> tracks;
 
     @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
     private List<Genre> genres;

@@ -278,6 +278,36 @@ public class SpotifyServiceImplementation implements SpotifyService {
     }
 
     @Override
+    public Set<Playlist> retrieveUserPlaylists(String userId) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        String url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + this.getAccessToken());
+        headers.set("Accept", "application/json");
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(response.getBody());
+        JsonNode itemsNode = rootNode.path("items");
+
+        Set<Playlist> playlists = new HashSet<>();
+
+        for (JsonNode itemNode : itemsNode) {
+            Playlist playlist = Playlist.builder()
+                    .spotifyId(itemNode.path("id").asText())
+                    .title(itemNode.path("name").asText())
+                    .photoUrl(itemNode.path("images").get(0).path("url").asText())
+                    .build();
+            playlists.add(playlist);
+        }
+
+        return playlists;
+    }
+
+    @Override
     public Playlist retrievePlaylist(String playlistId) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
 

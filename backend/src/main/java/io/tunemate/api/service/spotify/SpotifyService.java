@@ -14,5 +14,6 @@ public interface SpotifyService {
     Set<Release> retrieveArtistReleases(String artistId) throws JsonProcessingException;
     Set<Track> retrieveArtistTopTracks(String artistId) throws JsonProcessingException;
     Release retrieveRelease(String releaseId) throws JsonProcessingException;
+    Set<Playlist> retrieveUserPlaylists(String userId) throws JsonProcessingException;
     Playlist retrievePlaylist(String playlistId) throws JsonProcessingException;
 }

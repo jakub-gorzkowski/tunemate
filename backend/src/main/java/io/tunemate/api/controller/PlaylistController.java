@@ -2,7 +2,9 @@ package io.tunemate.api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.tunemate.api.dto.PlaylistDto;
+import io.tunemate.api.mapper.PlaylistMapper;
 import io.tunemate.api.model.Playlist;
+import io.tunemate.api.model.Release;
 import io.tunemate.api.service.playlist.PlaylistService;
 import io.tunemate.api.service.spotify.SpotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static io.tunemate.api.mapper.PlaylistMapper.mapToPlaylistDto;
 
@@ -45,5 +50,13 @@ public class PlaylistController {
         playlist = playlistService.findBySpotifyId(playlistId);
 
         return new ResponseEntity<>(mapToPlaylistDto(playlist), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/get/{userId}/playlists")
+    public ResponseEntity<Set<PlaylistDto>> getUserPlaylists(@PathVariable String userId) throws JsonProcessingException {
+        Set<Playlist> playlists = spotifyService.retrieveUserPlaylists(userId);
+        return new ResponseEntity<>(playlists.stream()
+                .map(PlaylistMapper::mapToPlaylistDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
     }
 }

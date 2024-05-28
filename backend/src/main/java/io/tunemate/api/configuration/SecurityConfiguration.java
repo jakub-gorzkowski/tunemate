@@ -28,6 +28,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/api/artists/**").permitAll();
+                    authorize.requestMatchers("/api/releases/**").permitAll();
                     authorize.requestMatchers("/api/authentication/**").permitAll().anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

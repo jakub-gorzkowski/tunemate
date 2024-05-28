@@ -1,6 +1,7 @@
 package io.tunemate.api.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -45,7 +46,8 @@ public class Release {
         joinColumns = @JoinColumn(name = "release_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "track_id", referencedColumnName = "id")
     )
-    private List<Track> tracks;
+    @JsonManagedReference
+    private Set<Track> tracks;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

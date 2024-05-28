@@ -20,6 +20,15 @@ public class TrackServiceImplementation implements TrackService {
     }
 
     @Override
+    public boolean isTopTrack(String spotifyId) {
+        if (this.existsBySpotifyId(spotifyId)) {
+            Track foundTrack = trackRepository.findById(spotifyId).get();
+            return foundTrack.getIsTopTrack() != null;
+        }
+        return false;
+    }
+
+    @Override
     public Track createTrack(Track track) {
         return trackRepository.save(track);
     }

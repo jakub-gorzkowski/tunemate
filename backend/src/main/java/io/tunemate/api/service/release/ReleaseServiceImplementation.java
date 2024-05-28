@@ -20,6 +20,11 @@ public class ReleaseServiceImplementation implements ReleaseService {
     }
 
     @Override
+    public Release findBySpotifyId(String spotifyId) {
+        return releaseRepository.findById(spotifyId).get();
+    }
+
+    @Override
     public Release createRelease(Release release) {
         return releaseRepository.save(release);
     }

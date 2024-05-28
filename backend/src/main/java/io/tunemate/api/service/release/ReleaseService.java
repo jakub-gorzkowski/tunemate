@@ -4,5 +4,6 @@ import io.tunemate.api.model.Release;
 
 public interface ReleaseService {
     boolean existsBySpotifyId(String spotifyId);
+    Release findBySpotifyId(String spotifyId);
     Release createRelease(Release release);
 }

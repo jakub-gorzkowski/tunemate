@@ -5,6 +5,8 @@ import io.tunemate.api.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class TrackServiceImplementation implements TrackService {
     private final TrackRepository trackRepository;
@@ -26,6 +28,12 @@ public class TrackServiceImplementation implements TrackService {
             return foundTrack.getIsTopTrack() != null;
         }
         return false;
+    }
+
+    @Override
+    public Track findById(String spotifyId) {
+        Optional<Track> track = trackRepository.findById(spotifyId);
+        return track.orElse(null);
     }
 
     @Override

@@ -41,7 +41,7 @@ public class ArtistServiceImplementation implements ArtistService {
 
     @Override
     public Artist findById(String spotifyId) {
-        return artistRepository.findById(spotifyId).get();
+        return artistRepository.findById(spotifyId).orElse(null);
     }
 
     @Override

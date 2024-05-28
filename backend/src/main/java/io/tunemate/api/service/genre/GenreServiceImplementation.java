@@ -5,6 +5,8 @@ import io.tunemate.api.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class GenreServiceImplementation implements GenreService {
 
@@ -18,6 +20,12 @@ public class GenreServiceImplementation implements GenreService {
     @Override
     public boolean exists(String genre) {
         return genreRepository.existsById(genre);
+    }
+
+    @Override
+    public Genre findByName(String name) {
+        Optional<Genre> genre = genreRepository.findById(name);
+        return genre.orElse(null);
     }
 
     @Override

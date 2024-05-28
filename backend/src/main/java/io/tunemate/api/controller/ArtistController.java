@@ -1,6 +1,7 @@
 package io.tunemate.api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.tunemate.api.dto.ArtistDto;
 import io.tunemate.api.dto.TrackDto;
 import io.tunemate.api.mapper.TrackMapper;
 import io.tunemate.api.model.Artist;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static io.tunemate.api.mapper.ArtistMapper.mapToArtistDto;
 
 @RestController
 @RequestMapping("/api/artists")

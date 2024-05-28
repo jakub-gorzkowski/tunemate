@@ -3,12 +3,10 @@ package io.tunemate.api.service.spotify;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.tunemate.api.model.Artist;
-import io.tunemate.api.model.Genre;
-import io.tunemate.api.model.Release;
-import io.tunemate.api.model.Track;
+import io.tunemate.api.model.*;
 import io.tunemate.api.service.artist.ArtistService;
 import io.tunemate.api.service.genre.GenreService;
+import io.tunemate.api.service.release.ReleaseService;
 import io.tunemate.api.service.track.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -94,21 +92,22 @@ public class SpotifyServiceImplementation implements SpotifyService {
 
         for (JsonNode genre : genresNode) {
             String genreName = genre.asText();
-            if (!genreService.exists(genreName)) {
-                Genre artistGenre = new Genre();
-                artistGenre.setGenre(genreName);
 
-                Set<Artist> genreArtists = new HashSet<>();
-                if (artistGenre.getArtists() != null) {
-                    genreArtists = artistGenre.getArtists();
-                } else {
-                    genreArtists.add(artist);
-                }
-                artistGenre.setArtists(genreArtists);
-
-                genreService.createGenre(artistGenre);
-                genres.add(artistGenre);
+            Genre artistGenre = genreService.findByName(genreName);
+            if (artistGenre == null) {
+                artistGenre = Genre.builder()
+                        .genre(genreName)
+                        .build();
             }
+
+            Set<Artist> genreArtists = artistGenre.getArtists();
+            if (genreArtists == null) {
+                genreArtists = new HashSet<>();
+            }
+            genreArtists.add(artist);
+            artistGenre.setArtists(genreArtists);
+
+            genres.add(artistGenre);
         }
 
         artist.setGenres(genres);
@@ -206,6 +205,11 @@ public class SpotifyServiceImplementation implements SpotifyService {
                     .artists(artists)
                     .isTopTrack(true)
                     .build();
+
+            if (trackService.existsBySpotifyId(track.getSpotifyId())) {
+                trackService.createTrack(track);
+            }
+
             topTracks.add(track);
         }
 
@@ -269,6 +273,62 @@ public class SpotifyServiceImplementation implements SpotifyService {
                 .photoUrl(rootNode.path("images").get(0).path("url").asText())
                 .totalTracks(rootNode.path("total_tracks").asLong())
                 .releaseDate(releaseDate)
+                .tracks(tracks)
+                .build();
+    }
+
+    @Override
+    public Playlist retrievePlaylist(String playlistId) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        String url = "https://api.spotify.com/v1/playlists/" + playlistId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + this.getAccessToken());
+        headers.set("Accept", "application/json");
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(response.getBody());
+        JsonNode itemsNode = rootNode.path("tracks").path("items");
+
+        List<Track> tracks = new ArrayList<>();
+
+        for (JsonNode itemNode : itemsNode) {
+            Set<Artist> artists = new HashSet<>();
+            JsonNode artistsNode = itemNode.path("track").path("artists");
+
+            for (JsonNode artistNode : artistsNode) {
+                String spotifyId = artistNode.path("id").asText();
+
+                if (artistService.existsBySpotifyId(spotifyId)) {
+                    artists.add(artistService.findById(spotifyId));
+                } else {
+                    Artist artist = this.retrieveArtist(spotifyId);
+                    artistService.createArtist(artist);
+                }
+            }
+
+            Track track = Track.builder()
+                    .spotifyId(itemNode.path("track").path("id").asText())
+                    .title(itemNode.path("track").path("name").asText())
+                    .duration(itemNode.path("track").path("duration_ms").asLong())
+                    .trackNumber(itemNode.path("track").path("track_number").asLong())
+                    .artists(artists)
+                    .build();
+
+            if (trackService.isTopTrack(track.getSpotifyId())) {
+                track.setIsTopTrack(true);
+            }
+
+            tracks.add(track);
+        }
+
+        return Playlist.builder()
+                .spotifyId(rootNode.path("id").asText())
+                .title(rootNode.path("name").asText())
+                .photoUrl(rootNode.path("images").get(0).path("url").asText())
                 .tracks(tracks)
                 .build();
     }

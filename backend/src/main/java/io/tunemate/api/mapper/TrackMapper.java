@@ -12,7 +12,7 @@ public class TrackMapper {
                 .title(track.getTitle())
                 .duration(track.getDuration())
                 .artists(track.getArtists().stream()
-                        .map(ArtistMapper::MapToArtistDto)
+                        .map(ArtistMapper::mapToArtistDto)
                         .collect(Collectors.toSet()))
                 .build();
     }

@@ -14,7 +14,7 @@ public class ReleaseMapper {
         Set<ArtistDto> artistDtos = new HashSet<>();
         if (release.getArtists() != null) {
             artistDtos = release.getArtists().stream()
-                    .map(ArtistMapper::MapToArtistDto)
+                    .map(ArtistMapper::mapToArtistDto)
                     .collect(Collectors.toSet());
         }
 

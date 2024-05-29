@@ -1,21 +1,35 @@
 package io.tunemate.api.service.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tunemate.api.dto.UserDto;
+import io.tunemate.api.model.Playlist;
 import io.tunemate.api.model.User;
 import io.tunemate.api.repository.UserRepository;
+import io.tunemate.api.service.spotify.SpotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static io.tunemate.api.mapper.UserMapper.mapToUserDto;
 
 @Service
 public class UserServiceImplementation implements UserService {
+    private final SpotifyService spotifyService;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImplementation(UserRepository userRepository) {
+    public UserServiceImplementation(SpotifyService spotifyService, UserRepository userRepository) {
+        this.spotifyService = spotifyService;
         this.userRepository = userRepository;
     }
 
@@ -56,5 +70,35 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    @Override
+    public Set<Playlist> retrieveUserPlaylists(String userId) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        String url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + spotifyService.getAccessToken());
+        headers.set("Accept", "application/json");
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(response.getBody());
+        JsonNode itemsNode = rootNode.path("items");
+
+        Set<Playlist> playlists = new HashSet<>();
+
+        for (JsonNode itemNode : itemsNode) {
+            Playlist playlist = Playlist.builder()
+                    .spotifyId(itemNode.path("id").asText())
+                    .title(itemNode.path("name").asText())
+                    .photoUrl(itemNode.path("images").get(0).path("url").asText())
+                    .build();
+            playlists.add(playlist);
+        }
+
+        return playlists;
     }
 }

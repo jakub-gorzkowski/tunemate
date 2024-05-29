@@ -1,14 +1,15 @@
 package io.tunemate.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -16,11 +17,7 @@ import java.util.List;
 @Table(name = "tracks")
 public class Track {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
-
-    @Column(name = "spotify_id")
     private String spotifyId;
 
     @Column(name = "title")
@@ -29,8 +26,15 @@ public class Track {
     @Column(name = "duration")
     private Long duration;
 
+    @Column(name = "track_number")
+    private Long trackNumber;
+
+    @Column(name = "top_track")
+    private Boolean isTopTrack;
+
     @ManyToMany(mappedBy = "tracks")
-    private List<Release> releases;
+    @JsonBackReference
+    private Set<Release> releases;
 
     @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
     private List<Rating> ratings;
@@ -41,11 +45,9 @@ public class Track {
         joinColumns = @JoinColumn(name = "track_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "artist_id", referencedColumnName = "id")
     )
-    private List<Artist> artists;
+    @JsonManagedReference
+    private Set<Artist> artists;
 
     @ManyToMany(mappedBy = "tracks")
     private List<Playlist> playlists;
-
-    @ManyToMany(mappedBy = "tracks")
-    private List<Genre> genres;
 }

@@ -1,14 +1,15 @@
 package io.tunemate.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -16,11 +17,7 @@ import java.util.List;
 @Table(name = "artists")
 public class Artist {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
-
-    @Column(name = "spotify_id")
     private String spotifyId;
 
     @Column(name = "name")
@@ -28,9 +25,6 @@ public class Artist {
 
     @Column(name = "photo_url")
     private String photoUrl;
-
-    @Column(name = "listener_count")
-    private Long listenerCount;
 
     @Column(name = "follower_count")
     private Long followerCount;
@@ -41,13 +35,16 @@ public class Artist {
         joinColumns = @JoinColumn(name = "artist_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "release_id", referencedColumnName = "id")
     )
-    private List<Release> releases;
+    @JsonManagedReference
+    private Set<Release> releases;
 
     @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
-    private List<Track> tracks;
+    @JsonBackReference
+    private Set<Track> tracks;
 
     @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
-    private List<Genre> genres;
+    @JsonBackReference
+    private Set<Genre> genres;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

@@ -14,5 +14,7 @@ public interface UserService {
     UserDto findUserByEmail(String email);
     User updateUser(Long userId, User user);
     void deleteUser(Long userId);
+    Long getUserIdByEmail(String email);
+    User followArtist(Long userId, String artistId);
     Set<Playlist> retrieveUserPlaylists(String userId) throws JsonProcessingException;
 }

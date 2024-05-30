@@ -6,7 +6,7 @@ import io.tunemate.api.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static io.tunemate.api.mapper.UserMapper.mapToUserDto;
@@ -14,29 +14,16 @@ import static io.tunemate.api.mapper.UserMapper.mapToUserDto;
 @RestController
 @RequestMapping(path = "/api/user")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping(path = "/create")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        userService.createUser(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @GetMapping(path = "/getById/{id}")
-    public ResponseEntity<UserDto> readUserById(@PathVariable("id") Long userId) {
-        UserDto userDto = userService.findUserById(userId);
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/getByEmail/{email}")
-    public ResponseEntity<UserDto> readUserByEmail(@PathVariable("email") String email) {
-        UserDto userDto = userService.findUserByEmail(email);
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    @GetMapping(path = "/get")
+    public ResponseEntity<UserDto> readUserById(@AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(mapToUserDto(user), HttpStatus.OK);
     }
 
     @PatchMapping(path = "/update/{id}")
@@ -52,6 +39,15 @@ public class UserController {
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity deleteUser(@PathVariable("id") Long userId) {
         userService.deleteUser(userId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping(path = "/follow/{artistId}")
+    public ResponseEntity<UserDto> followArtist(
+            @AuthenticationPrincipal User user,
+            @PathVariable("artistId") String artistId
+    ) {
+        User retrievedUser = userService.followArtist(user.getId(), artistId);
+        return new ResponseEntity<>(mapToUserDto(retrievedUser), HttpStatus.OK);
     }
 }

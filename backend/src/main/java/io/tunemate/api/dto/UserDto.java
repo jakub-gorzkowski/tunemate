@@ -3,6 +3,8 @@ package io.tunemate.api.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 @Builder
 public class UserDto {
@@ -10,4 +12,5 @@ public class UserDto {
     private String username;
     private String photoUrl;
     private String email;
+    private Set<ArtistDto> favouriteArtists;
 }

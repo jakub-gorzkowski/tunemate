@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tunemate.api.dto.UserDto;
+import io.tunemate.api.model.Artist;
 import io.tunemate.api.model.Playlist;
 import io.tunemate.api.model.User;
+import io.tunemate.api.repository.ArtistRepository;
 import io.tunemate.api.repository.UserRepository;
 import io.tunemate.api.service.spotify.SpotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,17 @@ import static io.tunemate.api.mapper.UserMapper.mapToUserDto;
 public class UserServiceImplementation implements UserService {
     private final SpotifyService spotifyService;
     private final UserRepository userRepository;
+    private final ArtistRepository artistRepository;
 
     @Autowired
-    public UserServiceImplementation(SpotifyService spotifyService, UserRepository userRepository) {
+    public UserServiceImplementation(
+            SpotifyService spotifyService,
+            UserRepository userRepository,
+            ArtistRepository artistRepository
+    ) {
         this.spotifyService = spotifyService;
         this.userRepository = userRepository;
+        this.artistRepository = artistRepository;
     }
 
     @Override
@@ -70,6 +78,29 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    @Override
+    public Long getUserIdByEmail(String email) {
+        User user = userRepository.findByUsername(email).get();
+        return user.getId();
+    }
+
+    @Override
+    public User followArtist(Long userId, String artistId) {
+        User user = userRepository.findById(userId).get();
+        Artist artist = artistRepository.findById(artistId).get();
+
+        Set<Artist> favouriteArtists = user.getFavouriteArtists();
+        Set<User> fans = artist.getUsers();
+
+        favouriteArtists.add(artist);
+        fans.add(user);
+
+        user.setFavouriteArtists(favouriteArtists);
+        artist.setUsers(fans);
+
+        return userRepository.save(user);
     }
 
     @Override

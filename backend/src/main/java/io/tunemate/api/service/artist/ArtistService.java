@@ -2,6 +2,7 @@ package io.tunemate.api.service.artist;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.tunemate.api.model.Artist;
+import io.tunemate.api.model.Genre;
 import io.tunemate.api.model.Release;
 import io.tunemate.api.model.Track;
 
@@ -13,6 +14,7 @@ public interface ArtistService {
     Artist findById(String spotifyId);
     Artist updateReleases(Artist artist, Set<Release> releases);
     Artist updateTopTracks(Artist artist, Set<Track> tracks);
+    Set<Artist> getArtistsWithNewReleasesInGenre(Genre genre);
     Artist retrieveArtist(String artistId) throws JsonProcessingException;
     Set<Track> retrieveArtistTopTracks(String artistId) throws JsonProcessingException;
     Set<Release> retrieveArtistReleases(String artistId) throws JsonProcessingException;

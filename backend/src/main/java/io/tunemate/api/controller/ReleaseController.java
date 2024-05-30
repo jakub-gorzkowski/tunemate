@@ -2,6 +2,7 @@ package io.tunemate.api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.tunemate.api.dto.ReleaseDto;
+import io.tunemate.api.mapper.ReleaseMapper;
 import io.tunemate.api.model.Release;
 import io.tunemate.api.service.release.ReleaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static io.tunemate.api.mapper.ReleaseMapper.mapToReleaseDto;
 
@@ -42,5 +46,21 @@ public class ReleaseController {
         release = releaseService.findBySpotifyId(releaseId);
 
         return new ResponseEntity<>(mapToReleaseDto(release), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/this-week")
+    public ResponseEntity<Set<ReleaseDto>> thisWeekReleases() {
+        Set<Release> releases = releaseService.getThisWeekReleases();
+        return new ResponseEntity<>(releases.stream()
+                .map(ReleaseMapper::mapToReleaseDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/this-month")
+    public ResponseEntity<Set<ReleaseDto>> thisMonthReleases() {
+        Set<Release> releases = releaseService.getThisMonthReleases();
+        return new ResponseEntity<>(releases.stream()
+                .map(ReleaseMapper::mapToReleaseDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
     }
 }

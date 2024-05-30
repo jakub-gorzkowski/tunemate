@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ArtistServiceImplementation implements ArtistService {
@@ -77,9 +78,11 @@ public class ArtistServiceImplementation implements ArtistService {
         }
 
         Set<Release> currentReleases = artist.getReleases();
-        currentReleases.removeAll(managedReleases);
+        if (currentReleases != null) {
+            currentReleases.removeAll(managedReleases);
+            currentReleases.addAll(managedReleases);
+        }
 
-        currentReleases.addAll(managedReleases);
         artist.setReleases(currentReleases);
 
         return artistRepository.save(artist);
@@ -102,6 +105,17 @@ public class ArtistServiceImplementation implements ArtistService {
         artist.setTracks(currentTopTracks);
 
         return artistRepository.save(artist);
+    }
+
+    @Override
+    public Set<Artist> getArtistsWithNewReleasesInGenre(Genre genre) {
+        Set<Artist> artists = artistRepository.findArtistsByGenres(Set.of(genre));
+        return artists.stream()
+                .filter(artist -> {
+                    Set<Release> releases = artist.getReleases();
+                    return releases.stream().anyMatch(release -> LocalDate.now().minusMonths(24).isBefore(release.getReleaseDate()));
+                })
+                .collect(Collectors.toSet());
     }
 
     @Override

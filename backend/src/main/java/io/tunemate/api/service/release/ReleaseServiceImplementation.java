@@ -19,10 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ReleaseServiceImplementation implements ReleaseService {
@@ -118,5 +116,21 @@ public class ReleaseServiceImplementation implements ReleaseService {
                 .releaseDate(releaseDate)
                 .tracks(tracks)
                 .build();
+    }
+
+    @Override
+    public Set<Release> getThisWeekReleases() {
+        List<Release> releases = releaseRepository.findAll();
+        return releases.stream()
+                .filter(release -> LocalDate.now().minusDays(7).isBefore(release.getReleaseDate()))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Release> getThisMonthReleases() {
+        List<Release> releases = releaseRepository.findAll();
+        return releases.stream()
+                .filter(release -> LocalDate.now().minusMonths(1).isBefore(release.getReleaseDate()))
+                .collect(Collectors.toSet());
     }
 }

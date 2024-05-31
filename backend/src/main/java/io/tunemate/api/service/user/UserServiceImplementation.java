@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tunemate.api.dto.UserDto;
-import io.tunemate.api.model.Artist;
-import io.tunemate.api.model.Genre;
-import io.tunemate.api.model.Playlist;
-import io.tunemate.api.model.User;
+import io.tunemate.api.model.*;
 import io.tunemate.api.repository.ArtistRepository;
 import io.tunemate.api.repository.GenreRepository;
 import io.tunemate.api.repository.PlaylistRepository;
@@ -189,6 +186,13 @@ public class UserServiceImplementation implements UserService {
 
         userRepository.save(user);
         genreRepository.save(genre);
+    }
+
+    @Override
+    public Set<Review> getReviews(Long userId) {
+        User user = userRepository.findById(userId).get();
+        Set<Review> reviews = user.getReviews();
+        return reviews;
     }
 
     @Override

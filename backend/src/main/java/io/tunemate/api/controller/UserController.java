@@ -2,11 +2,14 @@ package io.tunemate.api.controller;
 
 import io.tunemate.api.dto.GenreDto;
 import io.tunemate.api.dto.PlaylistDto;
+import io.tunemate.api.dto.ReviewDto;
 import io.tunemate.api.dto.UserDto;
 import io.tunemate.api.mapper.GenreMapper;
 import io.tunemate.api.mapper.PlaylistMapper;
+import io.tunemate.api.mapper.ReviewMapper;
 import io.tunemate.api.model.Genre;
 import io.tunemate.api.model.Playlist;
+import io.tunemate.api.model.Review;
 import io.tunemate.api.model.User;
 import io.tunemate.api.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,6 +130,15 @@ public class UserController {
 
         return new ResponseEntity<>(genres.stream()
                 .map(GenreMapper::mapToGenreDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/reviews/{userId}")
+    public ResponseEntity<Set<ReviewDto>> getUserReviews(@PathVariable Long userId) {
+        Set<Review> reviews = userService.getReviews(userId);
+
+        return new ResponseEntity<>(reviews.stream()
+                .map(ReviewMapper::mapToReviewDto)
                 .collect(Collectors.toSet()), HttpStatus.OK);
     }
 }

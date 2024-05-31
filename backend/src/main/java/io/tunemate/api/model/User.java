@@ -50,7 +50,7 @@ public class User implements org.springframework.security.core.userdetails.UserD
     private List<Playlist> playlists;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Rating> ratings;
+    private Set<Review> reviews;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(

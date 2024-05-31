@@ -8,6 +8,7 @@ import io.tunemate.api.model.Artist;
 import io.tunemate.api.model.Playlist;
 import io.tunemate.api.model.User;
 import io.tunemate.api.repository.ArtistRepository;
+import io.tunemate.api.repository.PlaylistRepository;
 import io.tunemate.api.repository.UserRepository;
 import io.tunemate.api.service.spotify.SpotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +30,19 @@ public class UserServiceImplementation implements UserService {
     private final SpotifyService spotifyService;
     private final UserRepository userRepository;
     private final ArtistRepository artistRepository;
+    private final PlaylistRepository playlistRepository;
 
     @Autowired
     public UserServiceImplementation(
             SpotifyService spotifyService,
             UserRepository userRepository,
-            ArtistRepository artistRepository
+            ArtistRepository artistRepository,
+            PlaylistRepository playlistRepository
     ) {
         this.spotifyService = spotifyService;
         this.userRepository = userRepository;
         this.artistRepository = artistRepository;
+        this.playlistRepository = playlistRepository;
     }
 
     @Override
@@ -52,9 +56,9 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public UserDto findUserById(Long userId) {
+    public User findUserById(Long userId) {
         User user = userRepository.findById(userId).get();
-        return mapToUserDto(user);
+        return user;
     }
 
     @Override
@@ -101,6 +105,47 @@ public class UserServiceImplementation implements UserService {
         artist.setUsers(fans);
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public User updateFavouritePlaylists(Long userId, String playlistId) {
+        User user = userRepository.findById(userId).get();
+        Playlist playlist = playlistRepository.findById(playlistId).get();
+
+        Set<Playlist> favouritePlaylists = user.getFavouritePlaylists();
+        Set<User> users = playlist.getUsers();
+
+        favouritePlaylists.add(playlist);
+        users.add(user);
+
+        user.setFavouritePlaylists(favouritePlaylists);
+        playlist.setUsers(users);
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Set<Playlist> getFavouritePlaylists(Long userId) {
+        User user = userRepository.findById(userId).get();
+        return user.getFavouritePlaylists();
+    }
+
+    @Override
+    public void removePlaylistFromFavourites(Long userId, String playlistId) {
+        User user = userRepository.findById(userId).get();
+        Playlist playlist = playlistRepository.findById(playlistId).get();
+
+        Set<Playlist> playlists = user.getFavouritePlaylists();
+        Set<User> users = playlist.getUsers();
+
+        playlists.remove(playlist);
+        users.remove(user);
+
+        user.setFavouritePlaylists(playlists);
+        playlist.setUsers(users);
+
+        userRepository.save(user);
+        playlistRepository.save(playlist);
     }
 
     @Override

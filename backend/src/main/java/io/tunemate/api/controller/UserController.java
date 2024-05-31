@@ -1,6 +1,9 @@
 package io.tunemate.api.controller;
 
+import io.tunemate.api.dto.PlaylistDto;
 import io.tunemate.api.dto.UserDto;
+import io.tunemate.api.mapper.PlaylistMapper;
+import io.tunemate.api.model.Playlist;
 import io.tunemate.api.model.User;
 import io.tunemate.api.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static io.tunemate.api.mapper.UserMapper.mapToUserDto;
 
@@ -49,5 +55,40 @@ public class UserController {
     ) {
         User retrievedUser = userService.followArtist(user.getId(), artistId);
         return new ResponseEntity<>(mapToUserDto(retrievedUser), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{userId}/favourite-playlists")
+    public ResponseEntity<Set<PlaylistDto>> getUserFavouritePlaylists(@PathVariable Long userId) {
+        Set<Playlist> playlists = userService.getFavouritePlaylists(userId);
+
+        return new ResponseEntity<>(playlists.stream()
+                .map(PlaylistMapper::mapToPlaylistDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
+    @PatchMapping(path = "/add-favourite-playlist/{playlistId}")
+    public ResponseEntity<Set<PlaylistDto>> addPlaylistsToFavourites(
+            @AuthenticationPrincipal User user,
+            @PathVariable String playlistId
+    ) {
+        userService.updateFavouritePlaylists(user.getId(), playlistId);
+        Set<Playlist> playlists = userService.getFavouritePlaylists(user.getId());
+
+        return new ResponseEntity<>(playlists.stream()
+                .map(PlaylistMapper::mapToPlaylistDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/remove-from-favourite-playlists/{playlistId}")
+    public ResponseEntity<Set<PlaylistDto>> removePlaylistFromFavourites(
+            @AuthenticationPrincipal User user,
+            @PathVariable String playlistId
+    ) {
+        userService.removePlaylistFromFavourites(user.getId(), playlistId);
+        Set<Playlist> playlists = userService.getFavouritePlaylists(user.getId());
+
+        return new ResponseEntity<>(playlists.stream()
+                .map(PlaylistMapper::mapToPlaylistDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
     }
 }

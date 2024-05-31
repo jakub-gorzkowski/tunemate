@@ -10,11 +10,15 @@ import java.util.Set;
 public interface UserService {
     Boolean exists(Long userId);
     User createUser(User user);
-    UserDto findUserById(Long userId);
+    User findUserById(Long userId);
     UserDto findUserByEmail(String email);
     User updateUser(Long userId, User user);
     void deleteUser(Long userId);
     Long getUserIdByEmail(String email);
     User followArtist(Long userId, String artistId);
+    User updateFavouritePlaylists(Long userId, String playlistId);
+    Set<Playlist> getFavouritePlaylists(Long userId);
+    void removePlaylistFromFavourites(Long userId, String playlistId);
+
     Set<Playlist> retrieveUserPlaylists(String userId) throws JsonProcessingException;
 }

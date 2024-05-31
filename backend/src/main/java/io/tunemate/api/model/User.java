@@ -64,7 +64,7 @@ public class User implements org.springframework.security.core.userdetails.UserD
     private Set<Artist> favouriteArtists;
 
     @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Playlist> favouritePlaylists;
+    private Set<Playlist> favouritePlaylists;
 
     @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Release> favouriteReleases;

@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tunemate.api.dto.UserDto;
 import io.tunemate.api.model.Artist;
+import io.tunemate.api.model.Genre;
 import io.tunemate.api.model.Playlist;
 import io.tunemate.api.model.User;
 import io.tunemate.api.repository.ArtistRepository;
+import io.tunemate.api.repository.GenreRepository;
 import io.tunemate.api.repository.PlaylistRepository;
 import io.tunemate.api.repository.UserRepository;
 import io.tunemate.api.service.spotify.SpotifyService;
@@ -29,6 +31,7 @@ import static io.tunemate.api.mapper.UserMapper.mapToUserDto;
 public class UserServiceImplementation implements UserService {
     private final SpotifyService spotifyService;
     private final UserRepository userRepository;
+    private final GenreRepository genreRepository;
     private final ArtistRepository artistRepository;
     private final PlaylistRepository playlistRepository;
 
@@ -36,11 +39,13 @@ public class UserServiceImplementation implements UserService {
     public UserServiceImplementation(
             SpotifyService spotifyService,
             UserRepository userRepository,
+            GenreRepository genreRepository,
             ArtistRepository artistRepository,
             PlaylistRepository playlistRepository
     ) {
         this.spotifyService = spotifyService;
         this.userRepository = userRepository;
+        this.genreRepository = genreRepository;
         this.artistRepository = artistRepository;
         this.playlistRepository = playlistRepository;
     }
@@ -146,6 +151,44 @@ public class UserServiceImplementation implements UserService {
 
         userRepository.save(user);
         playlistRepository.save(playlist);
+    }
+
+    @Override
+    public User addGenre(Long userId, String genreName) {
+        User user = userRepository.findById(userId).get();
+        Genre genre = genreRepository.findById(genreName).get();
+
+        Set<User> users = genre.getUsers();
+        Set<Genre> genres = user.getGenres();
+
+        users.add(user);
+        genres.add(genre);
+
+        genre.setUsers(users);
+        user.setGenres(genres);
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Set<Genre> getFavouriteGenres(Long userId) {
+        User user = userRepository.findById(userId).get();
+        return user.getGenres();
+    }
+
+    @Override
+    public void removeGenre(Long userId, String genreName) {
+        User user = userRepository.findById(userId).get();
+        Genre genre = genreRepository.findById(genreName).get();
+
+        Set<Genre> genres = user.getGenres();
+        Set<User> users = genre.getUsers();
+
+        users.remove(user);
+        genres.remove(genre);
+
+        userRepository.save(user);
+        genreRepository.save(genre);
     }
 
     @Override

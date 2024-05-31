@@ -1,8 +1,11 @@
 package io.tunemate.api.controller;
 
+import io.tunemate.api.dto.GenreDto;
 import io.tunemate.api.dto.PlaylistDto;
 import io.tunemate.api.dto.UserDto;
+import io.tunemate.api.mapper.GenreMapper;
 import io.tunemate.api.mapper.PlaylistMapper;
+import io.tunemate.api.model.Genre;
 import io.tunemate.api.model.Playlist;
 import io.tunemate.api.model.User;
 import io.tunemate.api.service.user.UserService;
@@ -89,6 +92,41 @@ public class UserController {
 
         return new ResponseEntity<>(playlists.stream()
                 .map(PlaylistMapper::mapToPlaylistDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{userId}/genres")
+    public ResponseEntity<Set<GenreDto>> getFavouriteGenres(@PathVariable Long userId) {
+        Set<Genre> genres = userService.getFavouriteGenres(userId);
+
+        return new ResponseEntity<>(genres.stream()
+                .map(GenreMapper::mapToGenreDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
+    @PatchMapping(path = "/add-genre/{genre}")
+    public ResponseEntity<Set<GenreDto>> addGenreToFavourites(
+            @AuthenticationPrincipal User user,
+            @PathVariable String genre
+    ) {
+        userService.addGenre(user.getId(), genre);
+        Set<Genre> genres = userService.getFavouriteGenres(user.getId());
+
+        return new ResponseEntity<>(genres.stream()
+                .map(GenreMapper::mapToGenreDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/remove-genre/{genre}")
+    public ResponseEntity<Set<GenreDto>> removeGenreFromFavourites(
+            @AuthenticationPrincipal User user,
+            @PathVariable String genre
+    ) {
+        userService.removeGenre(user.getId(), genre);
+        Set<Genre> genres = userService.getFavouriteGenres(user.getId());
+
+        return new ResponseEntity<>(genres.stream()
+                .map(GenreMapper::mapToGenreDto)
                 .collect(Collectors.toSet()), HttpStatus.OK);
     }
 }

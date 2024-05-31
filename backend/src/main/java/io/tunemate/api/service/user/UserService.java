@@ -2,6 +2,7 @@ package io.tunemate.api.service.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.tunemate.api.dto.UserDto;
+import io.tunemate.api.model.Genre;
 import io.tunemate.api.model.Playlist;
 import io.tunemate.api.model.User;
 
@@ -19,6 +20,10 @@ public interface UserService {
     User updateFavouritePlaylists(Long userId, String playlistId);
     Set<Playlist> getFavouritePlaylists(Long userId);
     void removePlaylistFromFavourites(Long userId, String playlistId);
+    User addGenre(Long userId, String genreName);
+    Set<Genre> getFavouriteGenres(Long userId);
+
+    void removeGenre(Long userId, String genre);
 
     Set<Playlist> retrieveUserPlaylists(String userId) throws JsonProcessingException;
 }

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static io.tunemate.api.mapper.UserMapper.mapToUserDto;
+import static io.tunemate.api.mapper.UserMapper.*;
 
 @RestController
 @RequestMapping(path = "/api/user")
@@ -38,19 +38,19 @@ public class UserController {
         return new ResponseEntity<>(mapToUserDto(user), HttpStatus.OK);
     }
 
-    @PatchMapping(path = "/update/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long userId, @RequestBody User user) {
-        if (!userService.exists(userId)) {
+    @PatchMapping(path = "/update")
+    public ResponseEntity<UserDto> updateUser(@AuthenticationPrincipal User user, @RequestBody UserDto userBody) {
+        if (!userService.exists(user.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        user.setId(userId);
-        User updatedUser = userService.updateUser(userId, user);
+        user.setId(user.getId());
+        User updatedUser = userService.updateUser(user.getId(), mapFromUserDto(userBody));
         return new ResponseEntity<>(mapToUserDto(updatedUser), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity deleteUser(@PathVariable("id") Long userId) {
-        userService.deleteUser(userId);
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity deleteUser(@AuthenticationPrincipal User user) {
+        userService.deleteUser(user.getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -101,6 +101,15 @@ public class UserController {
     @GetMapping(path = "/{userId}/genres")
     public ResponseEntity<Set<GenreDto>> getFavouriteGenres(@PathVariable Long userId) {
         Set<Genre> genres = userService.getFavouriteGenres(userId);
+
+        return new ResponseEntity<>(genres.stream()
+                .map(GenreMapper::mapToGenreDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/genres")
+    public ResponseEntity<Set<GenreDto>> getGenres(@AuthenticationPrincipal User user) {
+        Set<Genre> genres = userService.getFavouriteGenres(user.getId());
 
         return new ResponseEntity<>(genres.stream()
                 .map(GenreMapper::mapToGenreDto)

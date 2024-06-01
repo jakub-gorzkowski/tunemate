@@ -74,7 +74,8 @@ public class UserServiceImplementation implements UserService {
         user.setId(userId);
         return userRepository.findById(userId).map(existingUser -> {
             Optional.ofNullable(user.getPhotoUrl()).ifPresent(existingUser::setPhotoUrl);
-            Optional.ofNullable(user.getUsername()).ifPresent(existingUser::setUsername);
+            Optional.ofNullable(user.getRealUsername()).ifPresent(existingUser::setRealUsername);
+            Optional.ofNullable(user.getSpotifyId()).ifPresent(existingUser::setSpotifyId);
             Optional.ofNullable(user.getEmail()).ifPresent(existingUser::setEmail);
             Optional.ofNullable(user.getPassword()).ifPresent(existingUser::setPassword);
             return userRepository.save(existingUser);

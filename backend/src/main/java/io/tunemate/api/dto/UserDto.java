@@ -12,5 +12,7 @@ public class UserDto {
     private String username;
     private String photoUrl;
     private String email;
+    private String spotifyId;
+    private String password;
     private Set<ArtistDto> favouriteArtists;
 }

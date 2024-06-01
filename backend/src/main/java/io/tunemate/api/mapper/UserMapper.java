@@ -10,12 +10,17 @@ import java.util.stream.Collectors;
 
 public class UserMapper {
     public static User mapFromUserDto(UserDto userDto) {
-        return User.builder()
+        User user = User.builder()
                 .id(userDto.getId())
-                .username(userDto.getUsername())
                 .email(userDto.getEmail())
                 .photoUrl(userDto.getPhotoUrl())
+                .password(userDto.getPassword())
+                .spotifyId(userDto.getSpotifyId())
                 .build();
+
+        user.setRealUsername(userDto.getUsername());
+
+        return user;
     }
 
     public static UserDto mapToUserDto(User user) {
@@ -30,6 +35,7 @@ public class UserMapper {
                 .username(user.getRealUsername())
                 .email(user.getEmail())
                 .photoUrl(user.getPhotoUrl())
+                .spotifyId(user.getSpotifyId())
                 .favouriteArtists(artistDtos)
                 .build();
     }

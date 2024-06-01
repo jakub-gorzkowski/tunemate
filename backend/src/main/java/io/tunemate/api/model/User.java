@@ -39,10 +39,6 @@ public class User implements org.springframework.security.core.userdetails.UserD
     @Column(name = "password")
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_details_id")
-    private UserDetails userDetails;
-
     @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> roles;
 
@@ -105,5 +101,8 @@ public class User implements org.springframework.security.core.userdetails.UserD
 
     public String getRealUsername() {
         return username;
+    }
+    public void setRealUsername(String username) {
+        this.username = username;
     }
 }

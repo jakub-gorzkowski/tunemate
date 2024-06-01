@@ -1,17 +1,18 @@
 package io.tunemate.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -38,34 +39,32 @@ public class User implements org.springframework.security.core.userdetails.UserD
     @Column(name = "password")
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_details_id")
-    private UserDetails userDetails;
-
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Playlist> playlists;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Rating> ratings;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Review> reviews;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_genres",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id")
     )
-    private List<Genre> genres;
+    @JsonManagedReference
+    private Set<Genre> genres;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private List<Artist> favouriteArtists;
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonBackReference
+    private Set<Artist> favouriteArtists;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private List<Playlist> favouritePlaylists;
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Playlist> favouritePlaylists;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Release> favouriteReleases;
 
     @Override
@@ -93,5 +92,17 @@ public class User implements org.springframework.security.core.userdetails.UserD
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    public String getRealUsername() {
+        return username;
+    }
+    public void setRealUsername(String username) {
+        this.username = username;
     }
 }

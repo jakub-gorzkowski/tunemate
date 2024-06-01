@@ -52,5 +52,6 @@ public class Artist {
             joinColumns = @JoinColumn(name = "artist_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
     )
-    private List<User> users;
+    @JsonManagedReference
+    private Set<User> users;
 }

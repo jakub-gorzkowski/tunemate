@@ -2,7 +2,7 @@ package io.tunemate.api.controller;
 
 import io.tunemate.api.request.AuthenticationRequest;
 import io.tunemate.api.response.AuthenticationResponse;
-import io.tunemate.api.service.authentication.AuthenticationServiceImplementation;
+import io.tunemate.api.service.authentication.AuthenticationService;
 import io.tunemate.api.request.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationServiceImplementation authenticationServiceImplementation;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ) {
-        return ResponseEntity.ok(authenticationServiceImplementation.register(request));
+        return ResponseEntity.ok(authenticationService.register(request));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
     ) {
-        return ResponseEntity.ok(authenticationServiceImplementation.authenticate(request));
+        return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 }

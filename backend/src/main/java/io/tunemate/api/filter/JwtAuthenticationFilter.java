@@ -1,6 +1,6 @@
 package io.tunemate.api.filter;
 
-import io.tunemate.api.service.jwt.JwtServiceImplementation;
+import io.tunemate.api.service.jwt.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtServiceImplementation jwtServiceImplementation;
+    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -30,36 +30,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final String authenticationHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String email;
-
-        if (authenticationHeader == null || !authenticationHeader.startsWith("Bearer ")) {
+        final String userEmail;
+        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        jwt = authenticationHeader.substring("Bearer ".length());
-        email = jwtServiceImplementation.extractEmail(jwt);
-
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
-
-            if (jwtServiceImplementation.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractUsername(jwt);
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities()
                 );
-
-                authenticationToken.setDetails(
+                authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
-
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-
         filterChain.doFilter(request, response);
     }
 }

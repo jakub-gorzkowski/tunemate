@@ -25,7 +25,7 @@ public class Review {
     @JoinColumn(name = "release_id")
     private Release release;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rating_id")
-    private Rating rating;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

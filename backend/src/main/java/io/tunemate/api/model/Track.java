@@ -36,8 +36,8 @@ public class Track {
     @JsonBackReference
     private Set<Release> releases;
 
-    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
-    private List<Rating> ratings;
+//    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
+//    private List<Rating> ratings;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

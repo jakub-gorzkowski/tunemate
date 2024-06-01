@@ -34,7 +34,7 @@ public class Release {
     private LocalDate releaseDate;
 
     @OneToMany(mappedBy = "release", cascade = CascadeType.ALL)
-    private List<Review> reviews;
+    private Set<Review> reviews;
 
     @ManyToMany(mappedBy = "releases")
     @JsonBackReference

@@ -4,12 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.tunemate.api.dto.ArtistDto;
 import io.tunemate.api.dto.ReleaseDto;
 import io.tunemate.api.dto.TrackDto;
+import io.tunemate.api.mapper.ArtistMapper;
 import io.tunemate.api.mapper.ReleaseMapper;
 import io.tunemate.api.mapper.TrackMapper;
 import io.tunemate.api.model.Artist;
+import io.tunemate.api.model.Genre;
 import io.tunemate.api.model.Release;
 import io.tunemate.api.model.Track;
 import io.tunemate.api.service.artist.ArtistService;
+import io.tunemate.api.service.genre.GenreService;
 import io.tunemate.api.service.release.ReleaseService;
 import io.tunemate.api.service.track.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +31,19 @@ import static io.tunemate.api.mapper.ArtistMapper.mapToArtistDto;
 @RequestMapping("/api/artists")
 public class ArtistController {
     private final ArtistService artistService;
+    private final GenreService genreService;
     private final ReleaseService releaseService;
     private final TrackService trackService;
 
     @Autowired
     public ArtistController(
             ArtistService artistService,
+            GenreService genreService,
             ReleaseService releaseService,
             TrackService trackService
     ) {
         this.artistService = artistService;
+        this.genreService = genreService;
         this.releaseService = releaseService;
         this.trackService = trackService;
     }
@@ -54,6 +60,16 @@ public class ArtistController {
         }
 
         return new ResponseEntity<>(mapToArtistDto(artist), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{genre}/new")
+    public ResponseEntity<Set<ArtistDto>> newInGenre(@PathVariable String genre) {
+        Genre foundGenre = genreService.findByName(genre);
+        Set<Artist> artists = artistService.getArtistsWithNewReleasesInGenre(foundGenre);
+
+        return new ResponseEntity<>(artists.stream()
+                .map(ArtistMapper::mapToArtistDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
     }
 
     @GetMapping(path = "/get/{artistId}/albums")

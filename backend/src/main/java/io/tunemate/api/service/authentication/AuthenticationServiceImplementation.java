@@ -12,7 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +29,7 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
                 .email(registerRequest.getEmail())
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .roles(new ArrayList<>())
+                .roles(List.of())
                 .build();
 
         userRepository.save(user);

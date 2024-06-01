@@ -3,10 +3,11 @@ package io.tunemate.api.service.release;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.tunemate.api.model.Artist;
-import io.tunemate.api.model.Release;
-import io.tunemate.api.model.Track;
+import io.tunemate.api.dto.ReviewDto;
+import io.tunemate.api.model.*;
 import io.tunemate.api.repository.ReleaseRepository;
+import io.tunemate.api.repository.ReviewRepository;
+import io.tunemate.api.repository.UserRepository;
 import io.tunemate.api.service.artist.ArtistService;
 import io.tunemate.api.service.spotify.SpotifyService;
 import io.tunemate.api.service.track.TrackService;
@@ -19,10 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static io.tunemate.api.mapper.ReviewMapper.mapFromReviewDto;
 
 @Service
 public class ReleaseServiceImplementation implements ReleaseService {
@@ -30,18 +31,24 @@ public class ReleaseServiceImplementation implements ReleaseService {
     private final ArtistService artistService;
     private final TrackService trackService;
     private final ReleaseRepository releaseRepository;
+    private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
 
     @Autowired
     public ReleaseServiceImplementation(
             SpotifyService spotifyService,
             ArtistService artistService,
             TrackService trackService,
-            ReleaseRepository releaseRepository
+            ReleaseRepository releaseRepository,
+            UserRepository userRepository,
+            ReviewRepository reviewRepository
     ) {
         this.spotifyService = spotifyService;
         this.artistService = artistService;
         this.trackService = trackService;
         this.releaseRepository = releaseRepository;
+        this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @Override
@@ -118,5 +125,40 @@ public class ReleaseServiceImplementation implements ReleaseService {
                 .releaseDate(releaseDate)
                 .tracks(tracks)
                 .build();
+    }
+
+    @Override
+    public Set<Release> getThisWeekReleases() {
+        List<Release> releases = releaseRepository.findAll();
+        return releases.stream()
+                .filter(release -> LocalDate.now().minusDays(7).isBefore(release.getReleaseDate()))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Release> getThisMonthReleases() {
+        List<Release> releases = releaseRepository.findAll();
+        return releases.stream()
+                .filter(release -> LocalDate.now().minusMonths(1).isBefore(release.getReleaseDate()))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void addReview(Long userId, String releaseId, ReviewDto reviewDto) {
+        User user = userRepository.findById(userId).get();
+        Release release = releaseRepository.findById(releaseId).get();
+        Review review = mapFromReviewDto(reviewDto);
+
+        review.setUser(user);
+        review.setRelease(release);
+
+        reviewRepository.save(review);
+    }
+
+    @Override
+    public Set<Review> getReviews(String releaseId) {
+        Release release = releaseRepository.findById(releaseId).get();
+        Set<Review> reviews = release.getReviews();
+        return reviews;
     }
 }

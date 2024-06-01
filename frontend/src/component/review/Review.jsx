@@ -1,4 +1,3 @@
-import Rating from "../content/rating/Rating";
 import Votes from "./Votes";
 
 function Review() {
@@ -9,7 +8,6 @@ function Review() {
                     <div className={"flex flex-auto items-center"}>
                         <div className={"flex flex-col mb-2"}>
                             <h1 className={"text-white text-xl mb-2"}>Username</h1>
-                            <Rating/>
                         </div>
                         <div className={"w-full"}/>
                         <Votes/>

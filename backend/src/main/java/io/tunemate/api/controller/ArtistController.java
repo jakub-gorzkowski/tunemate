@@ -2,9 +2,11 @@ package io.tunemate.api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.tunemate.api.dto.ArtistDto;
+import io.tunemate.api.dto.GenreDto;
 import io.tunemate.api.dto.ReleaseDto;
 import io.tunemate.api.dto.TrackDto;
 import io.tunemate.api.mapper.ArtistMapper;
+import io.tunemate.api.mapper.GenreMapper;
 import io.tunemate.api.mapper.ReleaseMapper;
 import io.tunemate.api.mapper.TrackMapper;
 import io.tunemate.api.model.Artist;
@@ -60,6 +62,24 @@ public class ArtistController {
         }
 
         return new ResponseEntity<>(mapToArtistDto(artist), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/get/{artistId}/genres")
+    public ResponseEntity<Set<GenreDto>> getGenre(@PathVariable String artistId) throws JsonProcessingException {
+        Artist artist;
+
+        if (!artistService.existsBySpotifyId(artistId)) {
+            artist = artistService.retrieveArtist(artistId);
+            artistService.createArtist(artist);
+        } else {
+            artist = artistService.findById(artistId);
+        }
+
+        Set<Genre> genres = artist.getGenres();
+
+        return new ResponseEntity<>(genres.stream()
+                .map(GenreMapper::mapToGenreDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{genre}/new")

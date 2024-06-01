@@ -1,5 +1,8 @@
+function ArtistHeader({ artist }) {
+    if (!artist) {
+        return <div>Loading...</div>;
+    }
 
-function ArtistHeader() {
     return (
         <>
             <div className={"w-full flex flex-col items-center mt-44"}>
@@ -11,13 +14,12 @@ function ArtistHeader() {
                     <div className={[
                         "w-40",
                         "h-40",
-                        "bg-cover-placeholder",
+                        "bg-cover",
                         "rounded-full"
-                    ].join(' ')}></div>
+                    ].join(' ')} style={{ backgroundImage: `url(${artist.photoUrl})` }}></div>
                     <div className={"w-64 ml-4 text-white flex flex-col my-1"}>
-                        <h1 className={"text-4xl font-bold"}>Artist</h1>
-                        <h2>0 Followers</h2>
-                        <h2>0 Listeners in the last month</h2>
+                        <h1 className={"text-4xl font-bold"}>{artist.name}</h1>
+                        <h2>{artist.followerCount} Followers</h2>
                     </div>
                 </div>
             </div>

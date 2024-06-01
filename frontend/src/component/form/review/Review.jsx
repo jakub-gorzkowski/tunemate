@@ -1,5 +1,3 @@
-import Rating from "../../content/rating/Rating";
-
 function Review() {
     return (
         <>
@@ -12,7 +10,6 @@ function Review() {
                     "my-2"
                 ].join(' ')}>Share your thoughts</h1>
                 <div className={"p-4 flex flex-col"}>
-                    <Rating/>
                     <form method={"post"}>
                         <textarea placeholder={"Enter your comment here"}
                                   className={"bg-genre w-review mt-4 p-4 h-40 min-h-24 max-h-56 rounded-xl"}/>

@@ -1,5 +1,4 @@
 import { Icon } from '@iconify/react';
-import Rating from "../rating/Rating";
 
 const icons = [
     "w-7",
@@ -24,7 +23,6 @@ function ReleaseHeader() {
                         "rounded-lg"
                     ].join(' ')}></div>
                     <div className={"w-64 ml-4 text-white"}>
-                        <Rating/>
                         <h1 className={"text-4xl font-bold"}>Release title</h1>
                         <a href={"#"} className={"flex my-1"}><h2>Artist name</h2></a>
                         <p>Available on:</p>

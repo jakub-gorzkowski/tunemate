@@ -1,6 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import {Icon} from "@iconify/react";
+
+const icons = [
+    "w-7",
+    "h-7",
+    "mr-2",
+    "text-menu"
+].join(' ');
 
 function Genre(props) {
 
@@ -57,11 +65,13 @@ function Genre(props) {
                     <div className={"w-40"}/>
                     <div className="flex mt-2">
                         <button onClick={handleAddGenre}
-                                className="rounded-full content-center bg-green-500 hover:bg-green-600 text-white font-bold px-2 h-8 w-8">+
-                        </button>
+                                className=""><Icon
+                            icon={"mdi:plus"}
+                            className={icons + " hover:text-green-500"}/></button>
                         <button onClick={handleRemoveGenre}
-                                className="rounded-full content-center bg-red-500 hover:bg-red-600 text-white font-bold px-2 h-8 w-8 ml-1">-
-                        </button>
+                                className=""><Icon
+                            icon={"mdi:minus"}
+                            className={icons + " hover:text-red-500"}/></button>
                     </div>
                 </div>
             </div>

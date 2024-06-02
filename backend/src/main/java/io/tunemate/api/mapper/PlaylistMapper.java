@@ -23,4 +23,12 @@ public class PlaylistMapper {
                 .tracks(trackDtos)
                 .build();
     }
+
+    public static PlaylistDto mapToLabel(Playlist playlist) {
+        return PlaylistDto.builder()
+                .spotifyId(playlist.getSpotifyId())
+                .title(playlist.getTitle())
+                .photoUrl(playlist.getPhotoUrl())
+                .build();
+    }
 }

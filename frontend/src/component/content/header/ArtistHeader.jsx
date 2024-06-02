@@ -57,7 +57,9 @@ function ArtistHeader({ artist }) {
                         <div className="flex mt-2">
                             <a href={`https://open.spotify.com/artist/${artist.spotifyId}`}><Icon icon={"mdi:spotify"} className={icons + " hover:text-green-500"}/></a>
                             <button onClick={handleFollowArtist}
-                                    className="mx-1 px-2 rounded bg-blue-500 hover:bg-blue-600 text-white">Follow
+                                    className=""><Icon
+                                icon={"mdi:eye"}
+                                className={icons + " hover:text-blue-500"}/>
                             </button>
                         </div>
                     </div>

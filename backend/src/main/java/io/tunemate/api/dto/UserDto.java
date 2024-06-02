@@ -15,4 +15,7 @@ public class UserDto {
     private String spotifyId;
     private String password;
     private Set<ArtistDto> favouriteArtists;
+    private Set<ReleaseDto> favouriteReleases;
+    private Set<PlaylistDto> favouritePlaylists;
+    private Set<GenreDto> favouriteGenres;
 }

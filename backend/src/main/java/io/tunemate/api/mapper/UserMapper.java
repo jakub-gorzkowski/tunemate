@@ -1,7 +1,6 @@
 package io.tunemate.api.mapper;
 
-import io.tunemate.api.dto.ArtistDto;
-import io.tunemate.api.dto.UserDto;
+import io.tunemate.api.dto.*;
 import io.tunemate.api.model.User;
 
 import java.util.HashSet;
@@ -24,19 +23,47 @@ public class UserMapper {
     }
 
     public static UserDto mapToUserDto(User user) {
-        Set<ArtistDto> artistDtos = new HashSet<>();
+        Set<PlaylistDto> playlists = new HashSet<>();
         if (user.getFavouriteArtists() != null) {
-            artistDtos = user.getFavouriteArtists().stream()
+            playlists = user.getPlaylists().stream()
+                    .map(PlaylistMapper::mapToPlaylistDto)
+                    .collect(Collectors.toSet());
+        }
+        Set<ArtistDto> artists = new HashSet<>();
+        if (user.getFavouriteArtists() != null) {
+            artists = user.getFavouriteArtists().stream()
                     .map(ArtistMapper::mapToArtistDto)
                     .collect(Collectors.toSet());
         }
+        Set<ReleaseDto> releases = new HashSet<>();
+        if (user.getFavouriteArtists() != null) {
+            releases = user.getFavouriteReleases().stream()
+                    .map(ReleaseMapper::mapToReleaseDto)
+                    .collect(Collectors.toSet());
+        }
+        Set<PlaylistDto> favouritePlaylists = new HashSet<>();
+        if (user.getFavouriteArtists() != null) {
+            favouritePlaylists = user.getPlaylists().stream()
+                    .map(PlaylistMapper::mapToPlaylistDto)
+                    .collect(Collectors.toSet());
+        }
+        Set<GenreDto> genres = new HashSet<>();
+        if (user.getFavouriteArtists() != null) {
+            genres = user.getGenres().stream()
+                    .map(GenreMapper::mapToGenreDto)
+                    .collect(Collectors.toSet());
+        }
+
         return UserDto.builder()
                 .id(user.getId())
                 .username(user.getRealUsername())
                 .email(user.getEmail())
                 .photoUrl(user.getPhotoUrl())
                 .spotifyId(user.getSpotifyId())
-                .favouriteArtists(artistDtos)
+                .favouriteArtists(artists)
+                .favouriteReleases(releases)
+                .favouritePlaylists(favouritePlaylists)
+                .favouriteGenres(genres)
                 .build();
     }
 }

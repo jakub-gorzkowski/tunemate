@@ -21,11 +21,11 @@ function Artist(props) {
                         "bg-cover-placeholder",
                         "rounded-full"
                     ].join(' ')}
-                        style={{
-                        backgroundImage: `url(${props.data.photoUrl})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center'
-                    }}
+                         style={{
+                             backgroundImage: `url(${props.data.photoUrl})`,
+                             backgroundSize: 'cover',
+                             backgroundPosition: 'center'
+                         }}
                     ></div>
 
                     <h1 className={[

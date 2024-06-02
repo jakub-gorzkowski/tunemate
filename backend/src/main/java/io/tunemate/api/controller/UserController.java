@@ -34,7 +34,14 @@ public class UserController {
     }
 
     @GetMapping(path = "/get")
-    public ResponseEntity<UserDto> readUserById(@AuthenticationPrincipal User user) {
+    public ResponseEntity<UserDto> readUser(@AuthenticationPrincipal User user) {
+        User retrievedUser = userService.findUserById(user.getId());
+        return new ResponseEntity<>(mapToUserDto(retrievedUser), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{userId}")
+    public ResponseEntity<UserDto> readUserById(@PathVariable Long userId) {
+        User user = userService.findUserById(userId);
         return new ResponseEntity<>(mapToUserDto(user), HttpStatus.OK);
     }
 
@@ -61,6 +68,15 @@ public class UserController {
     ) {
         User retrievedUser = userService.followArtist(user.getId(), artistId);
         return new ResponseEntity<>(mapToUserDto(retrievedUser), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/favourite-playlists")
+    public ResponseEntity<Set<PlaylistDto>> getFavouritePlaylists(@AuthenticationPrincipal User user) {
+        Set<Playlist> playlists = userService.getFavouritePlaylists(user.getId());
+
+        return new ResponseEntity<>(playlists.stream()
+                .map(PlaylistMapper::mapToLabel)
+                .collect(Collectors.toSet()), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{userId}/favourite-playlists")

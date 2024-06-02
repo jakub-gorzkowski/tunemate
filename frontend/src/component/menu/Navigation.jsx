@@ -40,7 +40,7 @@ function Navigation() {
                     <MenuButton buttonIcon={faHome} buttonText={"Home"} url={"/"}/>
                     <MenuButton buttonIcon={faHeart} buttonText={"Favourites"} url={"/favourites"}/>
                     <MenuButton buttonIcon={faStar} buttonText={"Playlists"} url={"/playlists"}/>
-                    <MenuButton buttonIcon={faMessage} buttonText={"Reviews"} url={"/reviews"}/>
+                    {/*<MenuButton buttonIcon={faMessage} buttonText={"Reviews"} url={"/reviews"}/>*/}
                 </div>
                 <div className={[
                     "w-80",

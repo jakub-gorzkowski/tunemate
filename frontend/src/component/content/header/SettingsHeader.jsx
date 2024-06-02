@@ -1,4 +1,8 @@
-function SettingsHeader() {
+function SettingsHeader({ user }) {
+    if (!user) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
             <div className={"w-full flex flex-col items-center mt-36"}>
@@ -12,9 +16,13 @@ function SettingsHeader() {
                         "h-40",
                         "bg-cover-placeholder",
                         "rounded-full"
-                    ].join(' ')}></div>
+                    ].join(' ')} style={{
+                        backgroundImage: `url(${user.photoUrl})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                    }}></div>
                     <div className={"w-64 ml-4"}>
-                        <h1 className={"text-4xl font-bold text-white"}>Username</h1>
+                        <h1 className={"text-4xl font-bold text-white"}>{user.username}</h1>
                     </div>
                 </div>
                 <div className={"w-content"}>

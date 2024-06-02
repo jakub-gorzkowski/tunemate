@@ -2,21 +2,21 @@ package io.tunemate.api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.tunemate.api.dto.ArtistDto;
+import io.tunemate.api.dto.GenreDto;
 import io.tunemate.api.dto.ReleaseDto;
 import io.tunemate.api.dto.TrackDto;
 import io.tunemate.api.mapper.ArtistMapper;
+import io.tunemate.api.mapper.GenreMapper;
 import io.tunemate.api.mapper.ReleaseMapper;
 import io.tunemate.api.mapper.TrackMapper;
-import io.tunemate.api.model.Artist;
-import io.tunemate.api.model.Genre;
-import io.tunemate.api.model.Release;
-import io.tunemate.api.model.Track;
+import io.tunemate.api.model.*;
 import io.tunemate.api.service.artist.ArtistService;
 import io.tunemate.api.service.genre.GenreService;
 import io.tunemate.api.service.release.ReleaseService;
 import io.tunemate.api.service.track.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,6 +62,24 @@ public class ArtistController {
         return new ResponseEntity<>(mapToArtistDto(artist), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/get/{artistId}/genres")
+    public ResponseEntity<Set<GenreDto>> getGenre(@PathVariable String artistId) throws JsonProcessingException {
+        Artist artist;
+
+        if (!artistService.existsBySpotifyId(artistId)) {
+            artist = artistService.retrieveArtist(artistId);
+            artistService.createArtist(artist);
+        } else {
+            artist = artistService.findById(artistId);
+        }
+
+        Set<Genre> genres = artist.getGenres();
+
+        return new ResponseEntity<>(genres.stream()
+                .map(GenreMapper::mapToGenreDto)
+                .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/{genre}/new")
     public ResponseEntity<Set<ArtistDto>> newInGenre(@PathVariable String genre) {
         Genre foundGenre = genreService.findByName(genre);
@@ -70,6 +88,12 @@ public class ArtistController {
         return new ResponseEntity<>(artists.stream()
                 .map(ArtistMapper::mapToArtistDto)
                 .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/get/artist-id/{name}")
+    public ResponseEntity<String> getArtistIdByName(@PathVariable String name) {
+        Artist artist = artistService.getArtistByName(name);
+        return new ResponseEntity<>(artist.getSpotifyId(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/get/{artistId}/albums")

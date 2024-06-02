@@ -1,8 +1,9 @@
+import PropTypes from "prop-types";
 
-function Artist() {
+function Artist(props) {
     return (
         <>
-            <a href={"/artist/:id"}>
+            <a href={`/artist/${props.data.spotifyId}`}>
                 <div className={[
                     "flex",
                     "flex-col",
@@ -19,18 +20,28 @@ function Artist() {
                         "h-40",
                         "bg-cover-placeholder",
                         "rounded-full"
-                    ].join(' ')}></div>
+                    ].join(' ')}
+                         style={{
+                             backgroundImage: `url(${props.data.photoUrl})`,
+                             backgroundSize: 'cover',
+                             backgroundPosition: 'center'
+                         }}
+                    ></div>
 
                     <h1 className={[
                         "text-lg",
                         "text-title",
                         "font-medium",
                         "mt-2"
-                    ].join(' ')}>Artist</h1>
+                    ].join(' ')}>{props.data.name}</h1>
                 </div>
             </a>
         </>
     );
 }
+
+Artist.propTypes = {
+    data: PropTypes.object.isRequired
+};
 
 export default Artist;

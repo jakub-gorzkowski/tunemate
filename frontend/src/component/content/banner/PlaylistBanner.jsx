@@ -1,6 +1,6 @@
 import PlaylistHeader from "../header/PlaylistHeader";
 
-function PlaylistBanner() {
+function PlaylistBanner({ playlist }) {
     return (
         <>
             <div className={[
@@ -13,7 +13,7 @@ function PlaylistBanner() {
                 "border-b",
                 "border-menu"
             ].join(' ')}>
-                <PlaylistHeader/>
+                <PlaylistHeader playlist={playlist}/>
             </div>
         </>
     );

@@ -1,6 +1,6 @@
 import ArtistHeader from "../header/ArtistHeader";
 
-function ArtistBanner() {
+function ArtistBanner({ artist }) {
     return (
         <>
             <div className={[
@@ -13,11 +13,10 @@ function ArtistBanner() {
                 "border-b",
                 "border-menu"
             ].join(' ')}>
-                <ArtistHeader/>
+                <ArtistHeader artist={artist}/>
             </div>
         </>
     );
 }
-
 
 export default ArtistBanner;

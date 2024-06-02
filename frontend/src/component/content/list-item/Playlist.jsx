@@ -1,8 +1,9 @@
+import PropTypes from "prop-types";
 
-function Playlist() {
+function Playlist(props) {
     return (
         <>
-            <a href={"/playlist/:id"}>
+            <a href={`/playlist/${props.data.spotifyId}`}>
                 <div className={[
                     "flex",
                     "flex-col",
@@ -18,24 +19,28 @@ function Playlist() {
                         "h-40",
                         "bg-cover-placeholder",
                         "rounded-lg"
-                    ].join(' ')}></div>
+                    ].join(' ')}
+                         style={{
+                             backgroundImage: `url(${props.data.photoUrl})`,
+                             backgroundSize: 'cover',
+                             backgroundPosition: 'center'
+                         }}
+                    ></div>
 
                     <h1 className={[
                         "text-lg",
                         "text-title",
                         "font-medium",
                         "mt-2"
-                    ].join(' ')}>Playlist name</h1>
-
-                    <p className={[
-                        "text-sm",
-                        "text-menu",
-                        "font-thin"
-                    ].join(' ')}>Author username</p>
+                    ].join(' ')}>{props.data.title}</h1>
                 </div>
             </a>
         </>
     );
 }
+
+Playlist.propTypes = {
+    data: PropTypes.object.isRequired
+};
 
 export default Playlist;

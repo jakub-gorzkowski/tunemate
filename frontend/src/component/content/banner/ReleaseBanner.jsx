@@ -1,6 +1,6 @@
 import ReleaseHeader from "../header/ReleaseHeader";
 
-function ReleaseBanner() {
+function ReleaseBanner({ release }) {
     return (
         <>
             <div className={[
@@ -13,7 +13,7 @@ function ReleaseBanner() {
                 "border-b",
                 "border-menu"
             ].join(' ')}>
-                <ReleaseHeader/>
+                <ReleaseHeader release={release}/>
             </div>
         </>
     );

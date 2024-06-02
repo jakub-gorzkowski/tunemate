@@ -8,4 +8,5 @@ import java.util.Set;
 
 public interface ArtistRepository extends JpaRepository<Artist, String> {
     Set<Artist> findArtistsByGenres(Set<Genre> genres);
+    Artist findArtistsByName(String name);
 }

@@ -119,6 +119,11 @@ public class ArtistServiceImplementation implements ArtistService {
     }
 
     @Override
+    public Artist getArtistByName(String name) {
+        return artistRepository.findArtistsByName(name);
+    }
+
+    @Override
     public Artist retrieveArtist(String artistId) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
 

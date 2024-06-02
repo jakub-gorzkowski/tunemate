@@ -15,6 +15,7 @@ public interface ArtistService {
     Artist updateReleases(Artist artist, Set<Release> releases);
     Artist updateTopTracks(Artist artist, Set<Track> tracks);
     Set<Artist> getArtistsWithNewReleasesInGenre(Genre genre);
+    Artist getArtistByName(String name);
     Artist retrieveArtist(String artistId) throws JsonProcessingException;
     Set<Track> retrieveArtistTopTracks(String artistId) throws JsonProcessingException;
     Set<Release> retrieveArtistReleases(String artistId) throws JsonProcessingException;

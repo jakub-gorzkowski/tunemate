@@ -26,6 +26,7 @@ function Review({ release }) {
             .then(response => {
                 console.log(response.data);
                 setComment("");
+                window.location.reload();
             })
             .catch(error => {
                 console.error(error);

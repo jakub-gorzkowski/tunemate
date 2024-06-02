@@ -47,6 +47,10 @@ function ContentList(props) {
         }
     }, [props.type, props.data, props.artistId, props.id]);
 
+    if (!data) {
+        window.location.reload();
+    }
+
     return (
         props.type != null &&
         <>

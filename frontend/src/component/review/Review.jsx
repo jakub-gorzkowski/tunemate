@@ -10,13 +10,13 @@ function Review({ review }) {
                 <div className={"flex flex-auto items-center"}>
                     <div className={"flex flex-col mb-2"}>
                         <h1 className={"text-white text-xl mb-2"}>
-                            <Link to={`/user/${review.userDto.id}`} className="text-thin text-menu hover:underline">
+                            {/*<Link to={`/user/${review.userDto.id}`} className="text-thin text-menu hover:underline">*/}
                                 {review.userDto.username}
-                            </Link>
+                            {/*</Link>*/}
                         </h1>
                     </div>
                     <div className={"w-full"}/>
-                    <Votes/>
+                    {/*<Votes/>*/}
                 </div>
                 <h2 className={"font-thin text-menu"}>{review.content}</h2>
             </div>

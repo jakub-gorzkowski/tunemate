@@ -6,7 +6,7 @@ function ProfileBanner(props) {
     const { user } = props;
     const header = (
         props.type === 'profile' ? <UserHeader user={ user }/> :
-        props.type === 'settings' ? <SettingsHeader/> : null
+        props.type === 'settings' ? <SettingsHeader user={ user }/> : null
     );
 
     return (

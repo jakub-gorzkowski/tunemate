@@ -27,7 +27,7 @@ function Profile() {
     useEffect(() => {
         const timeout = setTimeout(() => {
             setLoading(false);
-        }, 150);
+        }, 500);
 
         return () => clearTimeout(timeout);
     }, []);
@@ -66,7 +66,7 @@ function Profile() {
                     </div>
                     <div className={"flex flex-col items-center justify-center my-16"}>
                         <TrackList title={"Popular tracks"} tracks={topTracks} length={10}/>
-                        <ContentList name={"Latest releases"} type={'release'} artistId={id} size={6}/>
+                        <ContentList name={"Releases"} type={'release'} artistId={id} size={12}/>
                         <ContentList name={"Genres"} type={'genre'} id={id} size={6}/>
                     </div>
                 </div>

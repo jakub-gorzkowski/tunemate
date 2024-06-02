@@ -35,6 +35,7 @@ function App() {
                         <Route path={'/artist/:id'} element={<Artist/>}/>
                         <Route path={'/release/:id'} element={<Release/>}/>
                         <Route path={'/playlist/:id'} element={<Playlist/>}/>
+                        <Route path={'/user/:id'} element={<Profile/>}/>
                     </Route>
                 </Routes>
             </div>

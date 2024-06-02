@@ -34,7 +34,13 @@ public class UserController {
     }
 
     @GetMapping(path = "/get")
-    public ResponseEntity<UserDto> readUserById(@AuthenticationPrincipal User user) {
+    public ResponseEntity<UserDto> readUser(@AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(mapToUserDto(user), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{userId}")
+    public ResponseEntity<UserDto> readUserById(@PathVariable Long userId) {
+        User user = userService.findUserById(userId);
         return new ResponseEntity<>(mapToUserDto(user), HttpStatus.OK);
     }
 

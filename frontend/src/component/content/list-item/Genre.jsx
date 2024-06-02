@@ -57,10 +57,10 @@ function Genre(props) {
                     <div className={"w-40"}/>
                     <div className="flex mt-2">
                         <button onClick={handleAddGenre}
-                                className="rounded bg-green-500 hover:bg-green-600 text-white font-bold px-2 h-8 w-8">+
+                                className="rounded-full content-center bg-green-500 hover:bg-green-600 text-white font-bold px-2 h-8 w-8">+
                         </button>
                         <button onClick={handleRemoveGenre}
-                                className="rounded bg-red-500 hover:bg-red-600 text-white font-bold px-2 h-8 w-8 ml-1">-
+                                className="rounded-full content-center bg-red-500 hover:bg-red-600 text-white font-bold px-2 h-8 w-8 ml-1">-
                         </button>
                     </div>
                 </div>

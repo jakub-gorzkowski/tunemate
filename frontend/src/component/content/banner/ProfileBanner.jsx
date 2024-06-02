@@ -3,8 +3,9 @@ import UserHeader from "../header/UserHeader";
 import SettingsHeader from "../header/SettingsHeader";
 
 function ProfileBanner(props) {
+    const { user } = props;
     const header = (
-        props.type === 'profile' ? <UserHeader/> :
+        props.type === 'profile' ? <UserHeader user={ user }/> :
         props.type === 'settings' ? <SettingsHeader/> : null
     );
 
